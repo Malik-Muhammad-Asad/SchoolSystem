@@ -1,0 +1,44 @@
+# Laravel specific
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/storage/framework/cache/data
+/storage/logs
+/.env.*
+/.phpunit.result.cache
+/.vscode
+/.idea
+
+# Filament
+/filament/*/storage
+/filament/*/node_modules
+
+# Composer
+/composer.phar
+/composer.lock
+
+# Jetstream (if using)
+/node_modules
+/public/vendor
+/storage/app/public
+/public/hot
+
+# Laravel Dusk (if using)
+/.dusk
+/tests/Browser/screenshots
+/tests/Browser/videos
+
+# IDE and OS files
+/.DS_Store
+Thumbs.db
+.idea/
+/.vscode/
+*.sublime-workspace
+
+# Mac specific
+*.DS_Store
+
+# Windows specific
+Thumbs.db
+Desktop.ini
