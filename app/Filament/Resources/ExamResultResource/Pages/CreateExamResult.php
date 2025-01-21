@@ -4,13 +4,14 @@ namespace App\Filament\Resources\ExamResultResource\Pages;
 
 use App\Filament\Resources\ExamResultResource;
 use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateExamResult extends CreateRecord
 {
     protected static string $resource = ExamResultResource::class;
-
+  
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $examResults = collect($data['exam_results']);
@@ -44,4 +45,5 @@ class CreateExamResult extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+    
 }

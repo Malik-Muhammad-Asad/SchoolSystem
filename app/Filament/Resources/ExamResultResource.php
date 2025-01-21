@@ -22,7 +22,7 @@ class ExamResultResource extends Resource
     protected static ?string $model = ExamResult::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Exam';
     public static function form(Form $form): Form
     {
         return $form
@@ -33,39 +33,28 @@ class ExamResultResource extends Resource
                         Forms\Components\Select::make('term_id')
                             ->label('Term')
                             ->relationship('term', 'name')
+                            ->disabled(fn($record): bool => $record ? true : false)
                             ->required(),
 
                         Forms\Components\Select::make('exam_id')
                             ->label('Exam')
                             ->relationship('exam', 'name')
+                             ->disabled(fn($record): bool => $record ? true : false)
                             ->required(),
 
                         Forms\Components\Select::make('subject_id')
                             ->label('Subject')
                             ->relationship('subject', 'name')
+                             ->disabled(fn($record): bool => $record ? true : false)
                             ->required(),
 
                         Forms\Components\Select::make('class_id')
                             ->label('Class')
                             ->relationship('class', 'name')
                             ->required()
+                             ->disabled(fn($record): bool => $record ? true : false)
                             ->reactive() // This makes it reactive to fetch students based on the selected class
-                            // ->afterStateUpdated(function ($state, callable $set,callback $get) {
-                            //     $subjectId = $get('subject_id');
-                            //     $termId =   $get('term_id');
-                            //     $examId =   $get('exam_id');
-
-
-                            //     $students = \App\Models\ExamResult::where('class_id', $state)->get();
-
-                            //     $students = \App\Models\Student::where('class_id', $state)->get();
-                            //     $examResults = $students->map(fn($student) => [
-                            //         'student_name' => $student->name,
-                            //         'father_name' => $student->father_name,
-                            //         'student_id' => $student->id,
-                            //     ])->toArray();
-                            //     $set('exam_results', $examResults);
-                            // }),
+                           
                             ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                 $subjectId = $get('subject_id');
                                 $termId = $get('term_id');
@@ -128,7 +117,7 @@ class ExamResultResource extends Resource
                                     ->label('Student ID'),
 
                                 Forms\Components\TextInput::make('father_name')
-                                    ->label('Subject Number')
+                                    ->label('Father Name')
                                     ->disabled()
                                     ->required(),
 
@@ -136,13 +125,16 @@ class ExamResultResource extends Resource
                                     ->label('Obtain Number')
                                     ->numeric()
                                     ->required(),
+                                    
                             ])
                             ->deletable(false)
                             ->addable(false)
                             ->columns(3)
                             ->columnSpanFull()
-                            ->orderColumn(false)
+                            ->orderColumn(false),
                     ]),
+    
+                    
                 // Disable removing students manually
             ]);
     }
@@ -151,18 +143,20 @@ class ExamResultResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->query(ExamResult::query())
+        ->query(
+            ExamResult::query()
+                ->selectRaw('MIN(id) as id, class_id, term_id, exam_id, subject_id, subject_number')
+                ->groupBy('class_id', 'term_id', 'exam_id', 'subject_id','subject_number')
+        )
             ->columns([
                 Tables\Columns\TextColumn::make('serial')->label('S/N')
                     ->getStateUsing(fn($rowLoop) => $rowLoop->index + 1),
-                Tables\Columns\TextColumn::make('student.name')->label('Student Name'),
-                Tables\Columns\TextColumn::make('student.father_name')->label('Father Name'),
+               
                 Tables\Columns\TextColumn::make('class.name')->label('Class'),
                 Tables\Columns\TextColumn::make('term.name')->label('Term'),
                 Tables\Columns\TextColumn::make('exam.name')->label('Exam'),
                 Tables\Columns\TextColumn::make('subject.name')->label('Subject'),
                 Tables\Columns\TextColumn::make('subject_number')->label('Subject Number'),
-                Tables\Columns\TextColumn::make('obtain_number')->label('Obtain Number'),
             ])
             ->filters(
                 [
@@ -182,7 +176,10 @@ class ExamResultResource extends Resource
                 layout: FiltersLayout::AboveContent
             )
 
-            ->actions([])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+            ])
 
             ->bulkActions([])
             ->defaultSort('id', 'desc');
@@ -195,6 +192,7 @@ class ExamResultResource extends Resource
         return [
             'index' => Pages\ListExamResults::route('/'),
             'create' => Pages\CreateExamResult::route('/create'),
+            'view' => Pages\ViewExamResults::route('/{record}'),
             'edit' => Pages\EditExamResult::route('/{record}/edit'),
         ];
     }

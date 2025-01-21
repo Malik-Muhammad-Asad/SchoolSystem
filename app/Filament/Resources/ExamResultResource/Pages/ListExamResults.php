@@ -13,8 +13,8 @@ class ListExamResults extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            Actions\EditAction::make()->action('edit'),
+            Actions\CreateAction::make()->label('Create Exam Result'),
+            
         ];
     }
 }
