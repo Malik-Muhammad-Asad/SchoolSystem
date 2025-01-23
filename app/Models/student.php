@@ -20,6 +20,6 @@ class student extends Model
     ];
     public function classes()  // Fixed typo here
     {
-        return $this->hasMany(Classes::class, 'class_id');  // Corrected relationship
+        return $this->belongsTo(Classes::class, 'class_id');  // Corrected relationship
     }
 }

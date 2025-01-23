@@ -26,6 +26,7 @@ class StudentResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('gr_no')
                     ->required()
+                    ->unique()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -38,7 +39,9 @@ class StudentResource extends Resource
                     ->label('class')
                     ->required()
                     ->relationship('classes', 'name')  // Assumes the relationship is defined in the Student model (class() method)
-                    ->searchable(),   // 
+                    ->preload()
+                    ->searchable(),  
+                     // 
             ]);
     }
 

@@ -41,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->brandName("YSG School")
+            ->sidebarCollapsibleOnDesktop(true)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
