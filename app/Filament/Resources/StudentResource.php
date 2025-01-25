@@ -55,7 +55,7 @@ class StudentResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('gr_no')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('class_id')
+                Tables\Columns\TextColumn::make('classes.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

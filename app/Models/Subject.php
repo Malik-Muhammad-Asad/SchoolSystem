@@ -9,10 +9,11 @@ class Subject extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'class_id'];
+    protected $fillable = ['name'];
 
-    public function class()
+    
+    public function classes()
     {
-        return $this->belongsTo(Classes::class);
+        return $this->belongsToMany(Classes::class, 'class_subject');
     }
 }

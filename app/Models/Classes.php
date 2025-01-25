@@ -9,4 +9,12 @@ class Classes extends Model
     use HasFactory;
     protected $table = 'class';
     protected $fillable = ['name'];
+
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'class_subject', 'class_id', 'subject_id');
+    }
 }
+
+

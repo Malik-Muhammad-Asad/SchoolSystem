@@ -1,87 +1,101 @@
 <?php
+
 namespace App\Filament\Pages;
 
+use App\Models\Classes;
+use App\Models\Exam;
+use App\Models\Term;
+use Filament\Forms;
 use Filament\Pages\Page;
-use Filament\Tables;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
-class StudentExamReport extends Page implements HasTable
+class StudentExamReport extends Page implements Forms\Contracts\HasForms
 {
-    use InteractsWithTable;
+    use Forms\Concerns\InteractsWithForms;
 
-    public $classId, $termId, $examIds = [];
-    public $sheetData = [];
+    public $class = null;
+    public $term = null;
+    public $exams = [];
+    public $scores = [];
+    public $subjects = [];
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.student-exam-report';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public function table(Tables\Table $table): Tables\Table
+    public function mount()
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('student')
-                    ->label('Student Name')
-                    ->sortable(),
-
-                // Dynamically add subject columns
-                Tables\Columns\ViewColumn::make('marks')
-                    ->label('Marks')
-                    ->view('components.subject-marks-table'), // Custom blade component to render marks
-            ])
-            ->filters([
-                Tables\Filters\SelectFilter::make('class')
-                    ->label('Class')
-                    ->options([
-                        1 => 'Class 1',
-                        2 => 'Class 2',
-                        3 => 'Class 3',
-                    ]),
-                Tables\Filters\SelectFilter::make('term')
-                    ->label('Term')
-                    ->options([
-                        1 => 'Term 1',
-                        2 => 'Term 2',
-                        3 => 'Term 3',
-                    ]),
-            ])
-            ->headerActions([
-                Tables\Actions\Action::make('export_pdf')
-                    ->label('Export to PDF')
-                    ->action('exportPDF'),
-            ]);
+        // Initial values for form fields
+        $this->form->fill([
+            'class' => null,
+            'term' => null,
+            'exams' => [],
+        ]);
     }
 
-    public function updatedFilters()
+    protected function getFormSchema(): array
     {
-        $this->fetchData();
+        return [
+            Forms\Components\Grid::make() // Using default grid (auto-determines the number of columns)
+                ->schema([
+                    Forms\Components\Select::make('class')
+                        ->label('Class')
+                        ->options(Classes::pluck('name', 'id'))
+                        ->placeholder('Select a Class')
+                        ->required()
+                        ->columnSpan(4), // Span 4 columns
+    
+                    Forms\Components\Select::make('term')
+                        ->label('Term')
+                        ->options(Term::pluck('name', 'id'))
+                        ->placeholder('Select a Term')
+                        ->required()
+                        ->columnSpan(4), // Span 4 columns
+    
+                    Forms\Components\MultiSelect::make('exams')
+                        ->label('Exams')
+                        ->options(Exam::pluck('name', 'id'))
+                        ->placeholder('Select Exams')
+                        ->required()
+                        ->columnSpan(4), // Span 4 columns
+                ]),
+        ];
     }
+    
 
-    // Define the query method to fetch data
-    public function query()
+
+    public function search()
     {
-        if (!$this->classId || !$this->termId || empty($this->examIds)) {
-            return collect(); // Return an empty collection if filters are not set
-        }
+        $this->validate();
 
-        // Query data from the database
-        return DB::table('examresult')
-            ->join('students', 'examresult.student_id', '=', 'students.id')
-            ->join('subjects', 'examresult.subject_id', '=', 'subjects.id')
-            ->where('examresult.class_id', $this->classId)
-            ->where('examresult.term_id', $this->termId)
-            ->whereIn('examresult.exam_id', $this->examIds)
-            ->select('examresult.student_id', 'students.name', 'subjects.name as subject', 'examresult.obtain_number', 'examresult.exam_id', 'examresult.subject_id')
+        $this->subjects = DB::table('subjects')
+            ->where('class_id', $this->class)
             ->get();
-    }
 
-    // Export data to PDF
-    public function exportPDF()
-    {
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('exports.student-exam-report', ['sheetData' => $this->sheetData]);
-        return $pdf->download('student-exam-report.pdf');
+        $students = DB::table('students')
+            ->where('class', $this->class)
+            ->get();
+
+        $results = DB::table('exam_results')
+            ->where('class_id', $this->class)
+            ->where('term_id', $this->term)
+            ->whereIn('exam_id', $this->exams)
+            ->get()
+            ->groupBy('student_id');
+
+        $this->scores = $students->map(function ($student) use ($results) {
+            $studentScores = ['name' => $student->name];
+            foreach ($this->subjects as $subject) {
+                $examScores = $results->get($student->id)
+                    ->where('subject_id', $subject->id)
+                    ->pluck('obtain_number', 'exam_id')
+                    ->toArray();
+
+                $studentScores[$subject->name] = [
+                    'exams' => $examScores,
+                    'total' => array_sum($examScores),
+                ];
+            }
+            return $studentScores;
+        });
     }
 }

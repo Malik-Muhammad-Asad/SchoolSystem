@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
-{ use HasFactory;
+{
+    use HasFactory;
+
     protected $fillable = [
         'name',
-        'tream_id',];
+        'term_id', // Fixed typo from 'tream_id' to 'term_id'
+    ];
 
-    public function Trem()  // Fixed typo here
+    public function Term()  // Changed 'Term' to 'term' to follow Laravel naming conventions
     {
-        return $this->belongsTo(Term::class, 'term_id');  // Corrected relationship
+        return $this->belongsTo(Term::class, 'term_id'); // Correct relationship method
     }
-    
 }

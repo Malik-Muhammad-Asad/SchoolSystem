@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Subject name
-            $table->foreignId('class_id')->constrained('class')->onDelete('cascade'); // Class relationship
             $table->timestamps();
         });
     }

@@ -29,10 +29,7 @@ class SubjectResource extends Resource
                     ->label('Subject Name')
                     ->required(),
                 
-                Forms\Components\Select::make('class_id')
-                    ->label('Class')
-                    ->relationship('class', 'name')
-                    ->required(),
+                
             ]);
     }
 
@@ -45,10 +42,7 @@ class SubjectResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('class.name')
-                    ->label('Class')
-                    ->sortable()
-                    ->searchable(),
+                
             ])
             ->filters([
                 //

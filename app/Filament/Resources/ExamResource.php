@@ -29,7 +29,8 @@ class ExamResource extends Resource
                 Forms\Components\Select::make('term_id')
                     ->label('trem')
                     ->required()
-                    ->relationship('Trem', 'name')  // Assumes the relationship is defined in the Student model (class() method)
+                    ->preload()
+                    ->relationship('Term', 'name')  // Assumes the relationship is defined in the Student model (class() method)
                     ->searchable(),
             ]);
     }
