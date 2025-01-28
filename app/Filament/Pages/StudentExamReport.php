@@ -83,45 +83,29 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             ->get()
             ->groupBy('student_id');
 
-        // $this->scores = $students->map(function ($student) use ($results) {
-        //     $studentScores = ['name' => $student->name];
-        //     foreach ($this->subjects as $subject) {
-        //         $examScores = $results->get($student->id)
-        //             ->where('subject_id', $subject->id)
-        //             ->pluck('obtain_number', 'exam_id')
-        //             ->toArray();
 
-        //         $studentScores[$subject->name] = [
-        //             'exams' => $examScores,
-        //             'total' => array_sum($examScores),
-        //         ];
-        //     }
-        //     return $studentScores;
-        // });
-        $this->scores = $students->map(function ($student) use ($results) {
+        $this->scores = $students->map(function ($student) use ($results, $examNames) {
             $studentScores = ['name' => $student->name];
 
-            // Ensure subjects exist and are iterable
             foreach ($this->subjects as $subject) {
-
-
-                dd( $subject->id);
                 // Get scores for the student and subject, default to 0 if missing
                 $examScores = optional($results->get($student->id))
                     ->where('subject_id', $subject->id)
                     ->pluck('obtain_number', 'exam_id')
                     ->toArray();
 
-                // Fill missing exam scores with 0
+                // Ensure we fill in all possible exams and set default 0 if no score exists
                 $examScores = array_replace(array_fill_keys($this->exams, 0), $examScores);
 
+                // Store the scores and total for each subject
                 $studentScores[$subject->name] = [
                     'exams' => $examScores,
-                    'total' => array_sum($examScores), // Ensure total defaults to 0 if empty
+                    'total' => array_sum($examScores), // Calculate total score
                 ];
             }
 
             return $studentScores;
         });
+
     }
 }
