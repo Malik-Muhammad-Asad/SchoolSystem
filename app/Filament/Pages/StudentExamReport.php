@@ -20,6 +20,7 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     public $subjects = [];
 
     protected static string $view = 'filament.pages.student-exam-report';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public function mount()
@@ -43,14 +44,14 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
                         ->placeholder('Select a Class')
                         ->required()
                         ->columnSpan(4), // Span 4 columns
-    
+
                     Forms\Components\Select::make('term')
                         ->label('Term')
                         ->options(Term::pluck('name', 'id'))
                         ->placeholder('Select a Term')
                         ->required()
                         ->columnSpan(4), // Span 4 columns
-    
+
                     Forms\Components\MultiSelect::make('exams')
                         ->label('Exams')
                         ->options(Exam::pluck('name', 'id'))
@@ -60,21 +61,21 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
                 ]),
         ];
     }
-    
+
 
 
     public function search()
     {
-        $this->validate();
 
-        $this->subjects = DB::table('subjects')
+
+
+        // $this->subjects = DB::table('subjects')
+        //     // ->where('class_id', $this->class)
+        //     ->get();
+        $this->subjects = DB::table('subjects')->get() ?? collect([]);
+        $students = DB::table('students')
             ->where('class_id', $this->class)
             ->get();
-
-        $students = DB::table('students')
-            ->where('class', $this->class)
-            ->get();
-
         $results = DB::table('exam_results')
             ->where('class_id', $this->class)
             ->where('term_id', $this->term)
@@ -82,19 +83,44 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             ->get()
             ->groupBy('student_id');
 
+        // $this->scores = $students->map(function ($student) use ($results) {
+        //     $studentScores = ['name' => $student->name];
+        //     foreach ($this->subjects as $subject) {
+        //         $examScores = $results->get($student->id)
+        //             ->where('subject_id', $subject->id)
+        //             ->pluck('obtain_number', 'exam_id')
+        //             ->toArray();
+
+        //         $studentScores[$subject->name] = [
+        //             'exams' => $examScores,
+        //             'total' => array_sum($examScores),
+        //         ];
+        //     }
+        //     return $studentScores;
+        // });
         $this->scores = $students->map(function ($student) use ($results) {
             $studentScores = ['name' => $student->name];
+
+            // Ensure subjects exist and are iterable
             foreach ($this->subjects as $subject) {
-                $examScores = $results->get($student->id)
+
+
+                dd( $subject->id);
+                // Get scores for the student and subject, default to 0 if missing
+                $examScores = optional($results->get($student->id))
                     ->where('subject_id', $subject->id)
                     ->pluck('obtain_number', 'exam_id')
                     ->toArray();
 
+                // Fill missing exam scores with 0
+                $examScores = array_replace(array_fill_keys($this->exams, 0), $examScores);
+
                 $studentScores[$subject->name] = [
                     'exams' => $examScores,
-                    'total' => array_sum($examScores),
+                    'total' => array_sum($examScores), // Ensure total defaults to 0 if empty
                 ];
             }
+
             return $studentScores;
         });
     }
