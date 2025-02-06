@@ -18,6 +18,8 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     public $exams = [];
     public $scores = [];
     public $subjects = [];
+    public $examNames = [];
+
 
     protected static string $view = 'filament.pages.student-exam-report';
 
@@ -63,6 +65,8 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     }
 
 
+  
+
 
     public function search()
     {
@@ -84,7 +88,14 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             ->groupBy('student_id');
 
 
-        $this->scores = $students->map(function ($student) use ($results, $examNames) {
+
+
+
+            $this->examNames = Exam::whereIn('id', $this->exams)
+            ->pluck('name', 'id')
+            ->toArray();
+
+        $this->scores = $students->map(function ($student) use ($results) {
             $studentScores = ['name' => $student->name];
 
             foreach ($this->subjects as $subject) {
