@@ -28,6 +28,15 @@
                                 {{ $subject->name }}
                             </th>
                         @endforeach
+                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            Total
+                        </th>
+                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            Percentage
+                        </th>
+                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            Grade
+                        </th>
                     </tr>
                     <tr class="border border-gray-300">
                         <!-- Sub Header Row -->
@@ -44,31 +53,58 @@
                     </tr>
                 </thead>
 
-
                 <tbody class="divide-y divide-gray-200">
                     @foreach ($scores as $score)
                         <tr>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $score['name'] }}</td>
+                            @php
+                                $totalScore = 0;
+                                $totalMaxScore = 0;
+                            @endphp
                             @foreach ($subjects as $subject)
+                                @php
+                                    $subjectMaxScore = DB::table('exam_results')
+                                        ->where('class_id', $this->class)
+                                        ->where('subject_id', $subject->id)
+                                        ->where('term_id', $this->term)
+                                        ->value('subject_number') ?? 0;
+                                    $subjectTotalScore = 0;
+                                @endphp
                                 @foreach ($exams as $examId)
                                     <td class="px-4 py-2 text-sm text-gray-700">
-                                        {{ $score[$subject->name]['exams'][$examId] ?? '-' }} <!-- Display the score for each exam -->
+                                        {{ $score[$subject->name]['exams'][$examId] ?? '-' }}
+                                        @php
+                                            $subjectTotalScore += $score[$subject->name]['exams'][$examId] ?? 0;
+                                        @endphp
                                     </td>
                                 @endforeach
                                 <td class="px-4 py-2 text-sm font-bold text-gray-900">
-                                    {{ $score[$subject->name]['total'] ?? '-' }} <!-- Display total score for the subject -->
+                                    {{ $subjectTotalScore }}
                                 </td>
+                                @php
+                                    $totalScore += $subjectTotalScore;
+                                    $totalMaxScore += $subjectMaxScore;
+                                @endphp
                             @endforeach
+                            <td class="px-4 py-2 text-sm font-bold text-gray-900">
+                                {{ $totalScore }}
+                            </td>
+
+                            @php
+                                $percentage = $totalMaxScore > 0 ? ($totalScore / $totalMaxScore) * 100 : 0;
+                                $grade = $this->getGrade($percentage);
+                            @endphp
+
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ number_format($percentage, 2) }}%
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ $grade }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     @endif
-
-
-
-
-
-
 </x-filament::page>
