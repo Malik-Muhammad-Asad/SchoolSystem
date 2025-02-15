@@ -20,14 +20,11 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     public $subjects = [];
     public $examNames = [];
 
-
     protected static string $view = 'filament.pages.student-exam-report';
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public function mount()
     {
-        // Initial values for form fields
         $this->form->fill([
             'class' => null,
             'term' => null,
@@ -38,38 +35,37 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     protected function getFormSchema(): array
     {
         return [
-            Forms\Components\Grid::make() // Using default grid (auto-determines the number of columns)
+            Forms\Components\Grid::make()
+                ->columns(3)
                 ->schema([
                     Forms\Components\Select::make('class')
                         ->label('Class')
                         ->options(Classes::pluck('name', 'id'))
                         ->placeholder('Select a Class')
-                        ->required()
-                        ->columnSpan(4), // Span 4 columns
+                        ->required(),
 
                     Forms\Components\Select::make('term')
                         ->label('Term')
                         ->options(Term::pluck('name', 'id'))
                         ->placeholder('Select a Term')
-                        ->required()
-                        ->columnSpan(4), // Span 4 columns
+                        ->required(),
 
                     Forms\Components\MultiSelect::make('exams')
                         ->label('Exams')
                         ->options(Exam::pluck('name', 'id'))
                         ->placeholder('Select Exams')
-                        ->required()
-                        ->columnSpan(4), // Span 4 columns
+                        ->required(),
                 ]),
         ];
     }
 
-
-  
-
-
     public function search()
     {
+        
+        // Validate form inputs
+       
+
+        // Fetch data
         $this->subjects = DB::table('subjects')->get() ?? collect([]);
         $students = DB::table('students')
             ->where('class_id', $this->class)
@@ -80,55 +76,32 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             ->whereIn('exam_id', $this->exams)
             ->get()
             ->groupBy('student_id');
-    
+
         $this->examNames = Exam::whereIn('id', $this->exams)
             ->pluck('name', 'id')
             ->toArray();
-    
+
+        // Process scores
         $this->scores = $students->map(function ($student) use ($results) {
             $studentScores = ['name' => $student->name];
-            
             $totalScore = 0;
-            $totalMaxScore = 0; // Initialize max score calculation for all subjects
-    
+            $totalMaxScore = 0;
             foreach ($this->subjects as $subject) {
-                // Get subject max score (subject_number) from exam_results table
-                $subjectMaxScore = DB::table('exam_results')
-                    ->where('class_id', $this->class)
-                    ->where('subject_id', $subject->id)
-                    ->where('term_id', $this->term)
-                    ->value('subject_number') ?? 0; // Get the max score (subject_number) for the subject
-    
-                // Get scores for the student and subject, default to 0 if missing
-                $examScores = optional($results->get($student->id))
-                    ->where('subject_id', $subject->id)
-                    ->pluck('obtain_number', 'exam_id')
-                    ->toArray();
-    
-                // Ensure we fill in all possible exams and set default 0 if no score exists
-                $examScores = array_replace(array_fill_keys($this->exams, 0), $examScores);
-    
-                // Calculate total score for the subject
+                $subjectMaxScore = $this->getSubjectMaxScore($subject->id);
+                $examScores = $this->getExamScores($results->get($student->id), $subject->id);
                 $subjectTotalScore = array_sum($examScores);
-    
-                // Add subject total score to the overall total score
+
                 $totalScore += $subjectTotalScore;
-                $totalMaxScore += $subjectMaxScore; // Add max score for the subject to the overall max score
-    
-                // Store the scores and total for each subject
+                $totalMaxScore += $subjectMaxScore;
+
                 $studentScores[$subject->name] = [
                     'exams' => $examScores,
-                    'total' => $subjectTotalScore, // Subject total score
+                    'total' => $subjectTotalScore,
                 ];
             }
-    
-            // Calculate overall percentage
-            $percentage = ($totalScore / $totalMaxScore) * 100;
-    
-            // Determine grade based on percentage
+            $percentage = $this->calculatePercentage($totalScore, $totalMaxScore);
             $grade = $this->getGrade($percentage);
-    
-            // Add the total, percentage, and grade to the student data
+
             $studentScores['total'] = $totalScore;
             $studentScores['percentage'] = $percentage;
             $studentScores['grade'] = $grade;
@@ -136,23 +109,34 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             return $studentScores;
         });
     }
-    
-    
-    
-    /**
-     * Function to determine the grade based on percentage
-     */
+
+    private function getSubjectMaxScore($subjectId)
+    {
+        return DB::table('exam_results')
+            ->where('class_id', $this->class)
+            ->where('subject_id', $subjectId)
+            ->where('term_id', $this->term)
+            ->value('subject_number') ?? 0;
+    }
+
+    private function getExamScores($studentResults, $subjectId)
+    {
+        return optional($studentResults)
+            ->where('subject_id', $subjectId)
+            ->pluck('obtain_number', 'exam_id')
+            ->toArray();
+    }
+
+    private function calculatePercentage($totalScore, $totalMaxScore)
+    {
+        return $totalMaxScore > 0 ? ($totalScore / $totalMaxScore) * 100 : 0;
+    }
+   
     private function getGrade($percentage)
     {
-        if ($percentage >= 80) {
-            return 'A';
-        } elseif ($percentage >= 60) {
-            return 'B';
-        } elseif ($percentage >= 40) {
-            return 'C';
-        } else {
-            return 'F';
-        }
+        if ($percentage >= 80) return 'A';
+        if ($percentage >= 60) return 'B';
+        if ($percentage >= 40) return 'C';
+        return 'F';
     }
-    
 }
