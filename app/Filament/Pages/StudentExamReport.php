@@ -61,10 +61,6 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
 
     public function search()
     {
-        
-        // Validate form inputs
-       
-
         // Fetch data
         $this->subjects = DB::table('subjects')->get() ?? collect([]);
         $students = DB::table('students')
@@ -112,11 +108,13 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
 
     private function getSubjectMaxScore($subjectId)
     {
+        // Fetch maximum marks for the subject from exam_results table
         return DB::table('exam_results')
             ->where('class_id', $this->class)
             ->where('subject_id', $subjectId)
             ->where('term_id', $this->term)
-            ->value('subject_number') ?? 0;
+            ->whereIn('exam_id', $this->exams) // Include only selected exams
+            ->sum('subject_number'); // Sum all max_marks for the subject
     }
 
     private function getExamScores($studentResults, $subjectId)
@@ -131,12 +129,15 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     {
         return $totalMaxScore > 0 ? ($totalScore / $totalMaxScore) * 100 : 0;
     }
-   
+
     private function getGrade($percentage)
     {
-        if ($percentage >= 80) return 'A';
-        if ($percentage >= 60) return 'B';
-        if ($percentage >= 40) return 'C';
+        if ($percentage >= 80)
+            return 'A';
+        if ($percentage >= 60)
+            return 'B';
+        if ($percentage >= 40)
+            return 'C';
         return 'F';
     }
 }

@@ -9,6 +9,7 @@ use App\Models\ExamResult;
 use App\Models\student;
 use App\Models\test;
 use Filament\Forms;
+use Filament\Notifications\Notification;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Layout;
 use Filament\Forms\Form;
@@ -75,10 +76,10 @@ class ExamResultResource extends Resource
                                 self::updateExamResults($set, $get);
                             }),
                         Forms\Components\Hidden::make('class_id'),
-
                         Forms\Components\TextInput::make('subject_number')
                             ->label('Subject Number')
                             ->numeric()
+                            ->minValue(1)
                             ->required(),
                     ])
                     ->columns(3),
@@ -103,7 +104,23 @@ class ExamResultResource extends Resource
                                 Forms\Components\TextInput::make('obtain_number')
                                     ->label('Obtain Number')
                                     ->numeric()
-                                    ->required(),
+                                    ->required()
+                                    ->afterStateUpdated(function ($state, $set, $get) {
+                                        // Fetch subject_number properly (outside the Repeater)
+                                        $subjectNumber = $get('../../subject_number') ?? 0;
+
+                                        if ($state > $subjectNumber) {
+                                            // Show a toast notification
+                                            Notification::make()
+                                                ->title('Error')
+                                                ->body('Obtain Number cannot be greater than Subject Number!')
+                                                ->danger()
+                                                ->send();
+
+                                            // Reset obtain_number to 0
+                                            $set('obtain_number', 0);
+                                        }
+                                    }),
 
                             ])
                             ->deletable(false)
@@ -175,6 +192,7 @@ class ExamResultResource extends Resource
 
         if (!$classId || !$subjectId || !$termId || !$examId || !$classId) {
             $set('exam_results', []);
+            $set('subject_number', 0);
             return;
         }
 
@@ -186,11 +204,17 @@ class ExamResultResource extends Resource
             ->where('term_id', $termId)
             ->where('exam_id', $examId)
             ->get();
+        if ($existingExamResults->isNotEmpty()) {
+            $set('subject_number', $existingExamResults[0]->subject_number);
+        } else {
+            $set('subject_number', 0);
+        }
 
         $examResults = $students->map(function ($student) use ($existingExamResults) {
             $examResult = $existingExamResults->firstWhere('student_id', $student->id);
 
             return [
+                'id'=> $examResult ? $examResult->id : null,
                 'student_name' => $student->name,
                 'father_name' => $student->father_name,
                 'student_id' => $student->id,
