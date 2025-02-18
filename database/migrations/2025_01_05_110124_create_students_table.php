@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');           // Student's name
             $table->string('father_name');    // Father's name
-            $table->string('gr_no')->unique(); // GR (General Register) number, unique
+            $table->string('gr_no')->unique()->nullable(); // GR (General Register) number, unique
             $table->foreignId('class_id')->constrained('class')->onDelete('cascade'); // Foreign key for class
             $table->timestamps();
         });
