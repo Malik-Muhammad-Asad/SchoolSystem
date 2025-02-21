@@ -18,4 +18,8 @@ class Exam extends Model
     {
         return $this->belongsTo(Term::class, 'term_id'); // Correct relationship method
     }
+    public function examResults()
+    {
+        return $this->hasMany(ExamResult::class,'exam_id'); // Adjust model name if different
+    }
 }

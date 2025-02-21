@@ -7,6 +7,7 @@ use App\Filament\Resources\ExamResource\RelationManagers;
 use App\Models\Exam;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -60,6 +61,25 @@ class ExamResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->action(function ($record) {
+                    if ($record->examResults()->exists()) {
+                        Notification::make()
+                            ->danger()
+                            ->title('Deletion Blocked')
+                            ->body('Cannot delete this exam because exam results are created to it.')
+                            ->send();
+                        return false; // Prevent deletion
+                    }
+                    else{
+                        $record->delete();
+                        Notification::make()
+                            ->success()
+                            ->title('Deleted')
+                            ->body('')
+                            ->send();
+                    }
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
