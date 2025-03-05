@@ -17,6 +17,9 @@
     'app.filament.resources.student-resource.pages.edit-student' => 'App\\Filament\\Resources\\StudentResource\\Pages\\EditStudent',
     'app.filament.resources.student-resource.pages.list-students' => 'App\\Filament\\Resources\\StudentResource\\Pages\\ListStudents',
     'app.filament.resources.student-resource.pages.view-student' => 'App\\Filament\\Resources\\StudentResource\\Pages\\ViewStudent',
+    'app.filament.resources.student-test-mark-resource.pages.create-student-test-mark' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\CreateStudentTestMark',
+    'app.filament.resources.student-test-mark-resource.pages.edit-student-test-mark' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\EditStudentTestMark',
+    'app.filament.resources.student-test-mark-resource.pages.list-student-test-marks' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\ListStudentTestMarks',
     'app.filament.resources.subject-resource.pages.create-subject' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\CreateSubject',
     'app.filament.resources.subject-resource.pages.edit-subject' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\EditSubject',
     'app.filament.resources.subject-resource.pages.list-subjects' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\ListSubjects',
@@ -25,6 +28,7 @@
     'app.filament.resources.term-resource.pages.list-terms' => 'App\\Filament\\Resources\\TermResource\\Pages\\ListTerms',
     'app.filament.resources.term-resource.pages.view-term' => 'App\\Filament\\Resources\\TermResource\\Pages\\ViewTerm',
     'app.filament.pages.student-exam-report' => 'App\\Filament\\Pages\\StudentExamReport',
+    'app.filament.pages.student-mark-sheet' => 'App\\Filament\\Pages\\StudentMarkSheet',
     'filament.pages.dashboard' => 'Filament\\Pages\\Dashboard',
     'filament.widgets.account-widget' => 'Filament\\Widgets\\AccountWidget',
     'filament.widgets.filament-info-widget' => 'Filament\\Widgets\\FilamentInfoWidget',
@@ -49,6 +53,7 @@
   'pages' => 
   array (
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Pages\\StudentExamReport.php' => 'App\\Filament\\Pages\\StudentExamReport',
+    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Pages\\StudentMarkSheet.php' => 'App\\Filament\\Pages\\StudentMarkSheet',
     0 => 'Filament\\Pages\\Dashboard',
   ),
   'pageDirectories' => 
@@ -65,6 +70,7 @@
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResource.php' => 'App\\Filament\\Resources\\ExamResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResultResource.php' => 'App\\Filament\\Resources\\ExamResultResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\StudentResource.php' => 'App\\Filament\\Resources\\StudentResource',
+    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\StudentTestMarkResource.php' => 'App\\Filament\\Resources\\StudentTestMarkResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\SubjectResource.php' => 'App\\Filament\\Resources\\SubjectResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\TermResource.php' => 'App\\Filament\\Resources\\TermResource',
   ),

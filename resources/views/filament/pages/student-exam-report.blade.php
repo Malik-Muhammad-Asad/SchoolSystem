@@ -17,21 +17,34 @@
             <table class="min-w-full table-auto border border-gray-300 divide-y divide-gray-200">
                 <thead class="bg-gray-100 border border-gray-300">
                     <tr>
-                        <th rowspan="2" class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border border-gray-300">
+                        <th rowspan="2"
+                            class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border border-gray-300">
                             Student Name
                         </th>
+                        <th rowspan="2"
+                            class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border border-gray-300">
+                            Father Name
+                        </th>
                         @foreach ($subjects as $subject)
-                            <th colspan="{{ count($exams) + 1 }}" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            <th colspan="{{ count($exams) + 1 }}"
+                                class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
                                 {{ $subject->name }}
                             </th>
                         @endforeach
-                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            1st Grand Test
+                        </th>
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
                             Total
                         </th>
-                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
                             Percentage
                         </th>
-                        <th rowspan="2" class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
                             Grade
                         </th>
                     </tr>
@@ -52,6 +65,7 @@
                     @foreach ($scores as $score)
                         <tr>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $score['name'] }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $score['father_name'] }}</td>
                             @foreach ($subjects as $subject)
                                 @foreach ($exams as $examId)
                                     <td class="px-4 py-2 text-sm text-gray-700">
@@ -62,6 +76,9 @@
                                     {{ $score[$subject->name]['total'] }}
                                 </td>
                             @endforeach
+                            <td class="px-4 py-2 text-sm font-bold text-gray-900">
+                                {{ $score['ExtraObtain'] }}
+                            </td>
                             <td class="px-4 py-2 text-sm font-bold text-gray-900">
                                 {{ $score['total'] }}
                             </td>
