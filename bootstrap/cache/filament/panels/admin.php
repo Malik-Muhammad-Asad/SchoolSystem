@@ -1,6 +1,10 @@
 <?php return array (
   'livewireComponents' => 
   array (
+    'app.filament.resources.class-subject-resource.pages.create-class-subject' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\CreateClassSubject',
+    'app.filament.resources.class-subject-resource.pages.edit-class-subject' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\EditClassSubject',
+    'app.filament.resources.class-subject-resource.pages.list-class-subjects' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ListClassSubjects',
+    'app.filament.resources.class-subject-resource.pages.view-class-subject' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ViewClassSubject',
     'app.filament.resources.classes-resource.pages.create-classes' => 'App\\Filament\\Resources\\ClassesResource\\Pages\\CreateClasses',
     'app.filament.resources.classes-resource.pages.edit-classes' => 'App\\Filament\\Resources\\ClassesResource\\Pages\\EditClasses',
     'app.filament.resources.classes-resource.pages.list-classes' => 'App\\Filament\\Resources\\ClassesResource\\Pages\\ListClasses',
@@ -66,6 +70,7 @@
   ),
   'resources' => 
   array (
+    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ClassSubjectResource.php' => 'App\\Filament\\Resources\\ClassSubjectResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ClassesResource.php' => 'App\\Filament\\Resources\\ClassesResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResource.php' => 'App\\Filament\\Resources\\ExamResource',
     'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResultResource.php' => 'App\\Filament\\Resources\\ExamResultResource',
