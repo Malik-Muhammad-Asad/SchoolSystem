@@ -157,7 +157,6 @@ class StudentMarkSheet extends Page implements HasTable
                             ->send();
                         return null;
                     }
-                    dd($records,"   " ,$data['term_id']);
                     return $this->downloadMarkSheets($records, $data['term_id']);
                 })
                 ->deselectRecordsAfterCompletion(),

@@ -10,6 +10,15 @@
             Search
         </x-filament::button>
     </div>
+    @if($scores && $subjects)
+        <x-filament::button wire:click="downloadPDF" color="success">
+            <span class="flex items-center gap-1">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5" />
+                Download PDF
+            </span>
+        </x-filament::button>
+    @endif
+
 
     <!-- Results Table -->
     @if ($scores && $subjects)

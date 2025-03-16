@@ -24,7 +24,7 @@ class ExamResultResource extends Resource
     protected static ?string $model = ExamResult::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationGroup = 'Exam';
+    protected static ?string $navigationGroup = 'Mask Compile';
     public static function form(Form $form): Form
     {
         return $form

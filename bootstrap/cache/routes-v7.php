@@ -126,6 +126,26 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/admin/class-subjects/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'filament.admin.resources.class-subjects.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/admin/classes' => 
       array (
         0 => 
@@ -431,7 +451,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::uFKbi0t8y7Sw4KdV',
+            '_route' => 'generated::ZqQ4OXDkytagehYq',
           ),
           1 => NULL,
           2 => 
@@ -451,7 +471,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::jXEhV9E6hGYm9Geq',
+            '_route' => 'generated::3z4c1r8mQTHYgXwo',
           ),
           1 => NULL,
           2 => 
@@ -490,7 +510,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::kJ0kbB9F5tpdwQkU',
+            '_route' => 'generated::v6MbGVynNMCZPcDu',
           ),
           1 => NULL,
           2 => 
@@ -510,7 +530,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::e7HreBq5SdICF4ro',
+            '_route' => 'generated::b41plBxs45BoRKk0',
           ),
           1 => NULL,
           2 => 
@@ -547,7 +567,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/filament/(?|exports/([^/]++)/download(*:45)|imports/([^/]++)/failed\\-rows/download(*:90))|/admin/(?|class(?|\\-subjects/(?|([^/]++)(*:138)|create(*:152)|([^/]++)/edit(*:173))|es/([^/]++)(?|(*:196)|/edit(*:209)))|exam(?|s/([^/]++)(?|(*:239)|/edit(*:252))|\\-results/([^/]++)(?|(*:282)|/edit(*:295)))|s(?|tudent(?|s/([^/]++)(?|(*:331)|/edit(*:344))|\\-test\\-marks/([^/]++)/edit(*:380))|ubjects/([^/]++)/edit(*:410))|terms/([^/]++)(?|(*:436)|/edit(*:449)))|/livewire/preview\\-file/([^/]++)(*:491)|/mark\\-sheets/([^/]++)/([^/]++)(*:530)|/storage/(.*)(*:551))/?$}sDu',
+      0 => '{^(?|/filament/(?|exports/([^/]++)/download(*:45)|imports/([^/]++)/failed\\-rows/download(*:90))|/admin/(?|class(?|\\-subjects/([^/]++)/edit(*:140)|es/([^/]++)(?|(*:162)|/edit(*:175)))|exam(?|s/([^/]++)(?|(*:205)|/edit(*:218))|\\-results/([^/]++)(?|(*:248)|/edit(*:261)))|s(?|tudent(?|s/([^/]++)(?|(*:297)|/edit(*:310))|\\-test\\-marks/([^/]++)(?|(*:344)|/edit(*:357)))|ubjects/([^/]++)/edit(*:388))|terms/([^/]++)(?|(*:414)|/edit(*:427)))|/livewire/preview\\-file/([^/]++)(*:469)|/mark\\-sheets/([^/]++)/([^/]++)(*:508)|/storage/(.*)(*:529))/?$}sDu',
     ),
     3 => 
     array (
@@ -597,52 +617,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      138 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'filament.admin.resources.class-subjects.view',
-          ),
-          1 => 
-          array (
-            0 => 'record',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      152 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'filament.admin.resources.class-subjects.create',
-          ),
-          1 => 
-          array (
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      173 => 
+      140 => 
       array (
         0 => 
         array (
@@ -665,7 +640,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      196 => 
+      162 => 
       array (
         0 => 
         array (
@@ -688,7 +663,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      209 => 
+      175 => 
       array (
         0 => 
         array (
@@ -711,7 +686,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      239 => 
+      205 => 
       array (
         0 => 
         array (
@@ -734,7 +709,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      252 => 
+      218 => 
       array (
         0 => 
         array (
@@ -757,7 +732,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      282 => 
+      248 => 
       array (
         0 => 
         array (
@@ -780,7 +755,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      295 => 
+      261 => 
       array (
         0 => 
         array (
@@ -803,7 +778,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      331 => 
+      297 => 
       array (
         0 => 
         array (
@@ -826,7 +801,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      344 => 
+      310 => 
       array (
         0 => 
         array (
@@ -849,7 +824,30 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      380 => 
+      344 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'filament.admin.resources.student-test-marks.view',
+          ),
+          1 => 
+          array (
+            0 => 'record',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      357 => 
       array (
         0 => 
         array (
@@ -872,7 +870,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      410 => 
+      388 => 
       array (
         0 => 
         array (
@@ -895,7 +893,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      436 => 
+      414 => 
       array (
         0 => 
         array (
@@ -918,7 +916,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      449 => 
+      427 => 
       array (
         0 => 
         array (
@@ -941,7 +939,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      491 => 
+      469 => 
       array (
         0 => 
         array (
@@ -964,7 +962,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      530 => 
+      508 => 
       array (
         0 => 
         array (
@@ -988,7 +986,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      551 => 
+      529 => 
       array (
         0 => 
         array (
@@ -1368,57 +1366,6 @@ app('router')->setCompiledRoutes(
         'uses' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ListClassSubjects@__invoke',
         'controller' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ListClassSubjects',
         'as' => 'filament.admin.resources.class-subjects.index',
-        'namespace' => NULL,
-        'prefix' => 'admin/class-subjects',
-        'where' => 
-        array (
-        ),
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'filament.admin.resources.class-subjects.view' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'admin/class-subjects/{record}',
-      'action' => 
-      array (
-        'domain' => NULL,
-        'middleware' => 
-        array (
-          0 => 'panel:admin',
-          1 => 'Illuminate\\Cookie\\Middleware\\EncryptCookies',
-          2 => 'Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse',
-          3 => 'Illuminate\\Session\\Middleware\\StartSession',
-          4 => 'Illuminate\\Session\\Middleware\\AuthenticateSession',
-          5 => 'Illuminate\\View\\Middleware\\ShareErrorsFromSession',
-          6 => 'Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken',
-          7 => 'Illuminate\\Routing\\Middleware\\SubstituteBindings',
-          8 => 'Filament\\Http\\Middleware\\DisableBladeIconComponents',
-          9 => 'Filament\\Http\\Middleware\\DispatchServingFilamentEvent',
-          10 => 'Filament\\Http\\Middleware\\Authenticate',
-        ),
-        'excluded_middleware' => 
-        array (
-        ),
-        'uses' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ViewClassSubject@__invoke',
-        'controller' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ViewClassSubject',
-        'as' => 'filament.admin.resources.class-subjects.view',
         'namespace' => NULL,
         'prefix' => 'admin/class-subjects',
         'where' => 
@@ -2459,6 +2406,57 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'filament.admin.resources.student-test-marks.view' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/student-test-marks/{record}',
+      'action' => 
+      array (
+        'domain' => NULL,
+        'middleware' => 
+        array (
+          0 => 'panel:admin',
+          1 => 'Illuminate\\Cookie\\Middleware\\EncryptCookies',
+          2 => 'Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse',
+          3 => 'Illuminate\\Session\\Middleware\\StartSession',
+          4 => 'Illuminate\\Session\\Middleware\\AuthenticateSession',
+          5 => 'Illuminate\\View\\Middleware\\ShareErrorsFromSession',
+          6 => 'Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken',
+          7 => 'Illuminate\\Routing\\Middleware\\SubstituteBindings',
+          8 => 'Filament\\Http\\Middleware\\DisableBladeIconComponents',
+          9 => 'Filament\\Http\\Middleware\\DispatchServingFilamentEvent',
+          10 => 'Filament\\Http\\Middleware\\Authenticate',
+        ),
+        'excluded_middleware' => 
+        array (
+        ),
+        'uses' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\ViewStudentTestMark@__invoke',
+        'controller' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\ViewStudentTestMark',
+        'as' => 'filament.admin.resources.student-test-marks.view',
+        'namespace' => NULL,
+        'prefix' => 'admin/student-test-marks',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'filament.admin.resources.student-test-marks.edit' => 
     array (
       'methods' => 
@@ -2898,7 +2896,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::uFKbi0t8y7Sw4KdV' => 
+    'generated::ZqQ4OXDkytagehYq' => 
     array (
       'methods' => 
       array (
@@ -2910,7 +2908,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::uFKbi0t8y7Sw4KdV',
+        'as' => 'generated::ZqQ4OXDkytagehYq',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2926,7 +2924,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::jXEhV9E6hGYm9Geq' => 
+    'generated::3z4c1r8mQTHYgXwo' => 
     array (
       'methods' => 
       array (
@@ -2938,7 +2936,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::jXEhV9E6hGYm9Geq',
+        'as' => 'generated::3z4c1r8mQTHYgXwo',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3009,7 +3007,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::kJ0kbB9F5tpdwQkU' => 
+    'generated::v6MbGVynNMCZPcDu' => 
     array (
       'methods' => 
       array (
@@ -3038,7 +3036,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000d5b0000000000000000";}}',
-        'as' => 'generated::kJ0kbB9F5tpdwQkU',
+        'as' => 'generated::v6MbGVynNMCZPcDu',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3054,7 +3052,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::e7HreBq5SdICF4ro' => 
+    'generated::b41plBxs45BoRKk0' => 
     array (
       'methods' => 
       array (
@@ -3077,7 +3075,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::e7HreBq5SdICF4ro',
+        'as' => 'generated::b41plBxs45BoRKk0',
       ),
       'fallback' => false,
       'defaults' => 

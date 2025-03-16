@@ -2,25 +2,20 @@
 
 namespace App\Filament\Resources\StudentTestMarkResource\Pages;
 
-use App\Filament\Resources\StudentTestMarkResource;
 use App\Models\student;
 use App\Models\StudentTestMark;
 use Filament\Actions\Action;
+use Filament\Resources\Pages\ViewRecord;
+use App\Filament\Resources\StudentTestMarkResource;
 
-use Filament\Actions;
-use Filament\Notifications\Notification;
-use Filament\Resources\Pages\EditRecord;
-
-class EditStudentTestMark extends EditRecord
+class ViewStudentTestMark extends ViewRecord
 {
     protected static string $resource = StudentTestMarkResource::class;
-
-    protected function getFormActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-
-            Action::make("Save Changes")->action('saveAndClose'),
-            Action::make('Close')
+            Action::make('back')
+                ->icon('heroicon-o-arrow-left')
                 ->action(function () {
                     return redirect($this->getResource()::getUrl('index')); // Redirect to the index page
                 }),
@@ -58,36 +53,4 @@ class EditStudentTestMark extends EditRecord
         return $data;
     }
 
-    public function saveAndClose(): void
-    {
-        $data = $this->form->getState();
-        $classId = $data['class_id'];
-        $termId = $data['term_id'];
-        $testName = $data['test_name'];
-        $subjectNumber = $data['subject_number'];
-        foreach ($data['test_marks'] as $examResult) {
-            StudentTestMark::updateOrCreate(
-                [
-                    'id' => $examResult['id'],
-                    'class_id' => $classId,
-                    'term_id' => $termId,
-                    'student_id' => $examResult['student_id'], // Student-specific
-                ],
-                [
-                    'test_name' => $testName,
-                    'obtain_number' => $examResult['obtain_number'], // Update or create with obtain_number
-                    'subject_number' => $subjectNumber,
-                ]
-            );
-        }
-        Notification::make()
-            ->success()
-            ->title('Record Saved')
-            ->body('Class subjects have been saved successfully!')
-            ->send();
-
-        unset($data['exam_results']);
-
-        redirect($this->getResource()::getUrl('index'));
-    }
 }

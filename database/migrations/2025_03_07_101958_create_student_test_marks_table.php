@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -16,6 +17,7 @@ return new class extends Migration {
             $table->foreignId('class_id')->nullable()->constrained('class');
             $table->foreignId('subject_id')->nullable()->constrained();
             $table->foreignId('term_id')->nullable()->constrained();
+            $table->string('test_name')->nullable(); // New column for test name
             $table->decimal('obtain_number', 5, 2)->nullable();
             $table->decimal('subject_number', 5, 2)->nullable();
             $table->timestamps();

@@ -150,7 +150,6 @@
                                 @php
                                     
                                     $subjectResults = $results[$subject->id] ?? collect();
-                                    dd($subjectResults);
                                     $oralMax =  20;
                                     $writtenMax =  50;
                                     $testMax = $subject->name == 'Nazra' || $subject->name == 'Summer vacation' ? 0 : 30;

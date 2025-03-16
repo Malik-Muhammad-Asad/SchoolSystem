@@ -10,6 +10,7 @@ class StudentTestMark extends Model
 
     protected $fillable = [
         'student_id',
+        'test_name',
         'class_id',
         'subject_id',
         'term_id',

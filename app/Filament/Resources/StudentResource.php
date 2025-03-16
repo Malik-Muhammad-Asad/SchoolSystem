@@ -20,7 +20,7 @@ class StudentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Student';
-
+    protected static ?string $navigationGroup = 'Setup';
     public static function form(Form $form): Form
     {
         return $form
@@ -41,8 +41,8 @@ class StudentResource extends Resource
                     ->required()
                     ->relationship('classes', 'name')  // Assumes the relationship is defined in the Student model (class() method)
                     ->preload()
-                    ->searchable(),  
-                     // 
+                    ->searchable(),
+                // 
             ]);
     }
 
@@ -51,9 +51,9 @@ class StudentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('sno')
-                ->label('Sno')
-                ->state(fn ($rowLoop) => $rowLoop->iteration)
-                ->sortable(),
+                    ->label('Sno')
+                    ->state(fn($rowLoop) => $rowLoop->iteration)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('father_name')
@@ -72,12 +72,14 @@ class StudentResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                Tables\Filters\SelectFilter::make('class_id')
-                ->label('Class')
-                ->relationship('classes', 'name'),
-            ],
-            layout: FiltersLayout::AboveContent)
+            ->filters(
+                [
+                    Tables\Filters\SelectFilter::make('class_id')
+                        ->label('Class')
+                        ->relationship('classes', 'name'),
+                ],
+                layout: FiltersLayout::AboveContent
+            )
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),

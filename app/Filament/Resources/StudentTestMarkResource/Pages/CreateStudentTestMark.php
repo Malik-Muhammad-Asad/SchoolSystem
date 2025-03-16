@@ -6,45 +6,51 @@ use App\Models\StudentTestMark;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Filament\Resources\Pages\CreateRecord;
-
+use Filament\Actions\Action;
 class CreateStudentTestMark extends CreateRecord
 {
     protected static string $resource = StudentTestMarkResource::class;
-
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction(),
+            Action::make('Cancel')
+                ->label('Cancel')
+                ->icon('heroicon-o-arrow-left')
+                ->url($this->getResource()::getUrl('index'))// Sirf "Create" button dikhai dega
+        ];
+    }
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $students = $data['test_marks'] ?? []; // Ensure we get the repeater data
-
-        if (empty($students)) {
-            throw new \Exception("No students found! Please select a class with students.");
-        }
+        $students = $data['test_marks'] ?? [];
 
         DB::transaction(function () use ($students, $data) {
             foreach ($students as $student) {
                 StudentTestMark::create([
+                    'test_name' => $data['test_name'] ?? null,
                     'student_id' => $student['student_id'],
                     'class_id' => $data['class_id'] ?? null,
-                    'subject_id' => $data['subject_id'] ?? null,
                     'term_id' => $data['term_id'] ?? null,
                     'obtain_number' => $student['obtain_number'] ?? 0,
                     'subject_number' => $data['subject_number'] ?? 0,
                     'created_at' => now(),
-                    'updated_at' => now(),
                 ]);
             }
         });
 
+        $this->notifyAndRedirect();
+        $this->halt();
+        return $data;
+    }
+    private function notifyAndRedirect(): void
+    {
         Notification::make()
             ->success()
             ->title('Record Saved')
-            ->body('Test results have been saved successfully!')
+            ->body('Class test masks have been saved successfully!')
             ->send();
 
-        // ✅ Correct way to redirect in Filament Livewire:
-        $this->redirect(StudentTestMarkResource::getUrl('index'));
-
-        return $data; // ✅ Ensure function returns an array
+        $this->redirect($this->getResource()::getUrl('index'));
     }
-
 
 }

@@ -15,7 +15,7 @@ class EditExamResult extends EditRecord
     protected function getFormActions(): array
     {
         return [
-          
+
             Action::make("Save Changes")->action('saveAndClose'),
             Action::make('Close')
                 ->action(function () {
@@ -23,7 +23,7 @@ class EditExamResult extends EditRecord
                 }),
         ];
     }
-    
+
 
 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -83,12 +83,10 @@ class EditExamResult extends EditRecord
                 ],
                 [
                     'obtain_number' => $examResult['obtain_number'], // Update or create with obtain_number
-                    'subject_number' => $subjectNumber, // Set the subject_number
+                    'subject_number' => $subjectNumber, 
                 ]
             );
         }
-
-        // Clean up the data (remove exam_results field as it's not needed for saving to the main table)
         unset($data['exam_results']);
 
         redirect($this->getResource()::getUrl('index'));

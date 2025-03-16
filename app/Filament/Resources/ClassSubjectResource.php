@@ -17,6 +17,8 @@ class ClassSubjectResource extends Resource
     protected static ?string $model = ClassSubject::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Class Subjects';
+    protected static ?string $navigationGroup = 'Setup';
+    protected static ?int $navigationSort = 2;
     protected static ?string $pluralLabel = 'Class Subjects';
 
     public static function form(Forms\Form $form): Forms\Form
@@ -59,21 +61,19 @@ class ClassSubjectResource extends Resource
             )
 
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->modal()
-                    ->modalWidth('lg'),
+
                 Tables\Actions\EditAction::make(),
             ])
             ->defaultSort(null);
 
     }
+    
 
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListClassSubjects::route('/'),
-            'view' => Pages\ViewClassSubject::route('/{record}'),
             'create' => Pages\CreateClassSubject::route('/create'),
             'edit' => Pages\EditClassSubject::route('/{record}/edit'),
 

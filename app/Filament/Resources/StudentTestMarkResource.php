@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Term;
 use App\Models\Subject;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Repeater;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Illuminate\Support\Facades\DB;
 use Filament\Notifications\Notification;
+use Symfony\Component\Console\Input\Input;
 
 class StudentTestMarkResource extends Resource
 {
@@ -22,13 +24,18 @@ class StudentTestMarkResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationLabel = 'Student Test Marks';
     protected static ?string $pluralLabel = 'Student Test Marks';
+    protected static ?string $navigationGroup = 'Mask Compile';
     protected static ?string $slug = 'student-test-marks';
 
     public static function form(Forms\Form $form): Forms\Form
     {
         return $form->schema([
-            Forms\Components\Section::make('Select Exam Details')
+            Forms\Components\Section::make('')
                 ->schema([
+
+                    TextInput::make('test_name')
+                        ->label('Test Name')
+                        ->required(),
                     Select::make('term_id')
                         ->label('Term')
                         ->relationship('term', 'name')
@@ -36,15 +43,7 @@ class StudentTestMarkResource extends Resource
                         ->reactive()
                         ->disabled(fn($record): bool => $record ? true : false)
                         ->afterStateUpdated(fn(callable $set, $get) => self::updateStudentList($set, $get)),
-
-                    Select::make('subject_id')
-                        ->label('Subject')
-                        ->relationship('subject', 'name')
-                        ->required()
-                        ->reactive()
-                        ->disabled(fn($record): bool => $record ? true : false)
-                        ->afterStateUpdated(fn(callable $set, $get) => self::updateStudentList($set, $get)),
-
+                    Hidden::make('term_id'),
                     Select::make('class_id')
                         ->label('Class')
                         ->relationship('class', 'name')
@@ -52,7 +51,7 @@ class StudentTestMarkResource extends Resource
                         ->reactive()
                         ->disabled(fn($record): bool => $record ? true : false)
                         ->afterStateUpdated(fn(callable $set, $get) => self::updateStudentList($set, $get)),
-
+                    Hidden::make('class_id'),
                     TextInput::make('subject_number')
                         ->label('Max Marks')
                         ->numeric()
@@ -66,6 +65,7 @@ class StudentTestMarkResource extends Resource
                         ->label('')
                         ->reactive()
                         ->schema([
+                            Hidden::make('id'),
                             Forms\Components\Placeholder::make('serial_no')
                                 ->label('S/N')
                                 ->content(fn($get) => array_search($get('student_id'), array_column($get('../../test_marks') ?? [], 'student_id')) + 1)
@@ -117,28 +117,23 @@ class StudentTestMarkResource extends Resource
     public static function updateStudentList(callable $set, callable $get)
     {
         $classId = $get('class_id');
-        $subjectId = $get('subject_id');
         $termId = $get('term_id');
 
-        if (!$classId || !$subjectId || !$termId) {
+        if (!$classId || !$termId) {
             $set('test_marks', []);
             return;
         }
 
         $students = Student::where('class_id', $classId)->get();
 
-        $existingMarks = StudentTestMark::where('class_id', $classId)
-            ->where('subject_id', $subjectId)
-            ->where('term_id', $termId)
-            ->get();
 
-        $testMarks = $students->map(function ($student) use ($existingMarks) {
-            $mark = $existingMarks->firstWhere('student_id', $student->id);
+        $testMarks = $students->map(function ($student) {
             return [
+                'id' => null,
                 'student_name' => $student->name,
                 'father_name' => $student->father_name,
                 'student_id' => $student->id,
-                'obtain_number' => $mark ? $mark->obtain_number : 0,
+                'obtain_number' => 0,
             ];
         })->toArray();
 
@@ -148,33 +143,57 @@ class StudentTestMarkResource extends Resource
     public static function table(Tables\Table $table): Tables\Table
     {
         return $table
+            ->query(
+                StudentTestMark::query()
+                    ->selectRaw('MIN(id) as id, class_id, term_id, test_name,subject_number')
+                    ->groupBy('class_id', 'term_id', 'test_name', 'subject_number')
+                    ->orderByRaw('MIN(id) ASC')
+            )
+
             ->columns([
-                Tables\Columns\TextColumn::make('student.name')->label('Student')->sortable(),
-                Tables\Columns\TextColumn::make('class.name')->label('Class')->sortable(),
-                Tables\Columns\TextColumn::make('subject.name')->label('Subject')->sortable(),
+                Tables\Columns\TextColumn::make('test_name')->label('Test Name')->sortable(),
                 Tables\Columns\TextColumn::make('term.name')->label('Term')->sortable(),
-                Tables\Columns\TextColumn::make('obtain_number')->label('Marks Obtained'),
+                Tables\Columns\TextColumn::make('class.name')->label('Class')->sortable(),
                 Tables\Columns\TextColumn::make('subject_number')->label('Max Marks'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('class_id')->label('Class')->relationship('class', 'name'),
-                Tables\Filters\SelectFilter::make('subject_id')->label('Subject')->relationship('subject', 'name'),
                 Tables\Filters\SelectFilter::make('term_id')->label('Term')->relationship('term', 'name'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('Delete')
+                    ->requiresConfirmation()
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->action(fn($record) => self::deleteStudentMask($record)),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+
             ]);
     }
+    public static function deleteStudentMask($record)
+    {
+        StudentTestMark::where('class_id', $record->class_id)
+            ->where('term_id', $record->term_id)
+            ->where('test_name', $record->test_name)
+            ->delete();
+        Notification::make()
+            ->success()
+            ->title('Record Deleted')
+            ->body('Class test masks deleted successfully!')
+            ->send();
+    }
+
+
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListStudentTestMarks::route('/'),
             'create' => Pages\CreateStudentTestMark::route('/create'),
+            'view' => Pages\ViewStudentTestMark::route('/{record}'),
             'edit' => Pages\EditStudentTestMark::route('/{record}/edit'),
         ];
     }
