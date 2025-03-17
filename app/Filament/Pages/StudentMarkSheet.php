@@ -87,16 +87,18 @@ class StudentMarkSheet extends Page implements HasTable
         ]);
 
         $this->isSearched = true;
+        $this->resetTable();
     }
 
     public function getTableQuery(): Builder
     {
         if (!$this->isSearched) {
-            return Student::whereRaw('1 = 0'); // Empty query if not searched
+            return Student::query()->whereRaw('1 = 0'); // Empty query
         }
 
-        return Student::query()->when($this->class_id, fn($query) => $query->where('class_id', $this->class_id));
+        return Student::query()->where('class_id', $this->class_id);
     }
+
 
     protected function getTableColumns(): array
     {
@@ -131,6 +133,11 @@ class StudentMarkSheet extends Page implements HasTable
         ];
     }
 
+    protected function isTableBulkActionsEnabled(): bool
+    {
+        return true;
+    }
+
     protected function getTableBulkActions(): array
     {
         return [
@@ -145,7 +152,7 @@ class StudentMarkSheet extends Page implements HasTable
                 ->form([
                     Select::make('term_id')
                         ->label('Term')
-                        ->options(Term::pluck('name', 'id')->toArray()) // Ensure array format
+                        ->options(Term::pluck('name', 'id')->toArray())
                         ->default($this->term_id)
                         ->required(),
                 ])
@@ -157,11 +164,15 @@ class StudentMarkSheet extends Page implements HasTable
                             ->send();
                         return null;
                     }
+
                     return $this->downloadMarkSheets($records, $data['term_id']);
                 })
                 ->deselectRecordsAfterCompletion(),
         ];
     }
+
+
+
 
     public function downloadAllMarkSheets()
     {
@@ -186,13 +197,15 @@ class StudentMarkSheet extends Page implements HasTable
         return $this->downloadMarkSheets($students, $this->term_id);
     }
 
-    public function downloadMarkSheets(Collection $students, $termId)
-    {
-        $pdf = Pdf::loadView('exports.mark-sheets', [
-            'students' => $students,
-            'termId' => $termId,
-        ]);
 
-        return response()->streamDownload(fn() => print ($pdf->output()), 'mark-sheets.pdf');
-    }
+
+    // public function downloadMarkSheets(Collection $students, $termId)
+    // {
+    //     $pdf = Pdf::loadView('exports.mark-sheets', [
+    //         'students' => $students,
+    //         'termId' => $termId,
+    //     ]);
+
+    //     return response()->streamDownload(fn() => print ($pdf->output()), 'mark-sheets.pdf');
+    // }
 }

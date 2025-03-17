@@ -11,11 +11,12 @@ class MarkSheetController extends Controller
 {
     public function downloadSingle(Student $student, Term $term)
     {
-
         $pdf = Pdf::loadView('exports.mark-sheets', [
             'students' => collect([$student]),
             'termId' => $term->id,
         ]);
+        // return $pdf->stream("mark-sheet-{$student->id}.pdf");
+
 
         return $pdf->download("mark-sheet-{$student->id}.pdf");
     }
