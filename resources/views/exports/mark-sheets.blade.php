@@ -2,101 +2,151 @@
 <html>
 
 <head>
+    @php
+        $watermarkPath = public_path('images/Logo.png'); // Ensure this file exists
+        $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
+
+    @endphp
     <meta charset="utf-8">
     <title>Student Report Card</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Georgia', serif;
+            font-size: 14px;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            text-align: center;
         }
 
         .report-card {
-            width: 100%;
-            max-width: 1100px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 30px;
-            border: 2px solid #333;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            /* other properties remain the same */
+            background-size: 200px;
+            background-repeat: no-repeat;
+
+            border: 3px solid #444;
             border-radius: 10px;
-            overflow-x: auto;
+            background-position: center;
+            background-color: #fff;
+            /* Keep background white */
+            position: relative;
+        }
+
+        /* Add this after the .report-card class */
+        .report-card::after {
+            content: "";
+            position: absolute;
+            top: -70px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ $watermark }}');
+            background-size: 200px;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.20;
+            /* Adjust this value (0.1-0.2 for very light) */
+            pointer-events: none;
+            z-index: 1;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .header img {
-            max-width: 100px;
+            max-width: 80px;
         }
 
         .title {
             font-size: 22px;
             font-weight: bold;
-            margin-top: 10px;
-            color: #333;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
         }
 
         .student-info {
-            background: #f2f2f2;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: left;
+            padding: 12px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
             font-size: 14px;
+            background: #f9f9f9;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            background: #fff;
-            table-layout: auto;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: center;
-            border: 1px solid #ddd;
-            font-size: 14px;
-            word-wrap: break-word;
+            border: 1px solid #ccc;
         }
 
         th {
-            background-color: #007bff;
+            background-color: #6b236a;
+            /* Change from #444 to a lighter gray */
             color: #fff;
-            font-weight: bold;
         }
 
-        .summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e9ecef;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .signatures {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Summary Table */
+        .summary-table {
             width: 100%;
-            flex-wrap: nowrap;
-            gap: 10px;
+            border: 1px solid #ccc;
+            margin-top: 15px;
         }
 
-        .signature {
+        .summary-table td {
+            padding: 10px;
             text-align: center;
-            flex: 1;
             font-weight: bold;
-            border-top: 1px solid #000;
-            padding-top: 5px;
-            white-space: nowrap;
+            border: 1px solid #ccc;
+            background: #f1f1f1;
+        }
+
+        /* Remarks Section */
+        .remarks-table {
+            width: 100%;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            margin-top: 15px;
+            border-collapse: collapse;
+            /* This ensures a single border */
+        }
+
+        .remarks-table td {
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            border: none;
+            /* Remove individual cell borders */
+        }
+
+        F
+
+        /* Signature Section */
+        .signatures-table {
+            width: 100%;
+            margin-top: 20px;
+            border: none;
+        }
+
+        .signatures-table td {
+            width: 50%;
+            text-align: center;
+            font-weight: bold;
+            padding-top: 20px;
+            border-top: 2px solid #000;
         }
     </style>
 </head>
@@ -123,19 +173,31 @@
             $totalMarks = 0;
             $totalObtained = 0;
         @endphp
+        @php
+            $path = public_path('images/schoolLogo.png'); // Ensure this file exists
+            $logo = "data:image/png;base64," . base64_encode(file_get_contents($path));
+        @endphp
+
+
+
 
         <div class="report-card">
+            <div style="text-align: center;">
+                <img src="{{ $logo }}" alt="School Logo"
+                    style="width: 550px; height: 100px; display: block; margin: 0 auto;">
+            </div>
             <div class="header">
-                <img src="{{ public_path('images/school-logo.jpeg') }}" alt="School Logo">
-                <div class="title">Student Report Card</div>
-                <div>{{ $term->name }} Examination (Session 2024-25)</div>
+
+
+                <div class="title">Progress Report</div>
+                <div class="subtitle">{{ $term->name }} Examination - Session 2024-25</div>
             </div>
 
             <div class="student-info">
-                <p><strong>Name:</strong> {{ $student->name }} | 
-                <strong>Father's Name:</strong> {{ $student->father_name }} | 
-                <strong>Class:</strong> {{ optional($student->classes)->name ?? 'N/A' }} | 
-                <strong>Roll No:</strong> {{ $student->id }}</p>
+                <p><strong>Student Name:</strong> {{ $student->name }} |
+                    <strong>Father Name:</strong> {{ $student->father_name }} |
+                    <strong>Class:</strong> {{ optional($student->classes)->name ?? 'N/A' }}
+                </p>
             </div>
 
             <table>
@@ -147,35 +209,35 @@
                             <th>Secured Marks</th>
                         @endforeach
                         <th>Total Marks</th>
-                        <th>Obtained Marks</th>
+                        <th>Marks Obtained</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($subjects as $subjectId)
-                        @php
-                            $subjectResults = $results[$subjectId] ?? collect();
-                            $subjectTotalMax = 0;
-                            $subjectTotalObtained = 0;
-                        @endphp
-                        <tr>
-                            <td>{{ optional($subjectResults->first()->subject)->name ?? 'N/A' }}</td>
-                            @foreach($exams as $exam)
                                 @php
-                                    $maxMarks = $subjectResults->where('exam_id', $exam->id)->first()->subject_number ?? 0;
-                                    $obtainedMarks = $subjectResults->where('exam_id', $exam->id)->first()->obtain_number ?? 0;
-                                    $subjectTotalMax += $maxMarks;
-                                    $subjectTotalObtained += $obtainedMarks;
+                                    $subjectResults = $results[$subjectId] ?? collect();
+                                    $subjectTotalMax = 0;
+                                    $subjectTotalObtained = 0;
                                 @endphp
-                                <td>{{ $maxMarks }}</td>
-                                <td>{{ $obtainedMarks }}</td>
-                            @endforeach
-                            <td><strong>{{ $subjectTotalMax }}</strong></td>
-                            <td><strong>{{ $subjectTotalObtained }}</strong></td>
-                        </tr>
-                        @php
-                            $totalMarks += $subjectTotalMax;
-                            $totalObtained += $subjectTotalObtained;
-                        @endphp
+                                <tr>
+                                    <td>{{ optional($subjectResults->first()->subject)->name ?? 'N/A' }}</td>
+                                    @foreach($exams as $exam)
+                                                @php
+                                                    $maxMarks = $subjectResults->where('exam_id', $exam->id)->first()->subject_number ?? 0;
+                                                    $obtainedMarks = $subjectResults->where('exam_id', $exam->id)->first()->obtain_number ?? 0;
+                                                    $subjectTotalMax += $maxMarks;
+                                                    $subjectTotalObtained += $obtainedMarks;
+                                                @endphp
+                                                <td>{{ number_format($maxMarks, 0) }}</td>
+                                                <td>{{ $obtainedMarks }}</td>
+                                    @endforeach
+                                    <td><strong>{{ $subjectTotalMax }}</strong></td>
+                                    <td><strong>{{ $subjectTotalObtained }}</strong></td>
+                                </tr>
+                                @php
+                                    $totalMarks += $subjectTotalMax;
+                                    $totalObtained += $subjectTotalObtained;
+                                @endphp
                     @endforeach
                     <tr>
                         <td colspan="{{ 2 * count($exams) + 1 }}"><strong>Grand Total</strong></td>
@@ -185,17 +247,70 @@
                 </tbody>
             </table>
 
-            <div class="summary">
-                <strong>Percentage:</strong> {{ round(($totalObtained / $totalMarks) * 100, 2) }}%<br>
-                <strong>Grade:</strong> 
-                {{ ($totalObtained / $totalMarks) * 100 >= 80 ? 'A+' : (($totalObtained / $totalMarks) * 100 >= 70 ? 'A' : (($totalObtained / $totalMarks) * 100 >= 60 ? 'B' : 'C')) }}
-            </div>
+            <!-- Summary Table (With Attendance) -->
+            <table class="summary-table">
+                <tr>
+                    <td><strong>Percentage:</strong> {{ round(($totalObtained / $totalMarks) * 100, 2) }}%</td>
+                    <td><strong>Grade:</strong>
+                        @php
+                            $percentage = ($totalObtained / $totalMarks) * 100;
+                            if ($percentage >= 90) {
+                                $grade = 'A+1';
+                            } elseif ($percentage >= 80) {
+                                $grade = 'A';
+                            } elseif ($percentage >= 70) {
+                                $grade = 'B';
+                            } elseif ($percentage >= 60) {
+                                $grade = 'C';
+                            } elseif ($percentage >= 50) {
+                                $grade = 'D';
+                            } elseif ($percentage >= 40) {
+                                $grade = 'E';
+                            } else {
+                                $grade = 'F';
+                            }
+                        @endphp
+                        {{ $grade }}
+                    </td>
 
-            <div class="signatures">
-                <div class="signature">Teacher's Signature</div>
-                <div class="signature">Principal's Signature</div>
-                <div class="signature">Parent's Signature</div>
-            </div>
+                    <td><strong>Rank:</strong> __________________</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>Attendance:</strong> _______ / _______</td>
+                </tr>
+            </table>
+
+            <!-- Remarks Section -->
+            <table class="remarks-table">
+                <tr>
+                    <td>Teacher's Remarks: __________________________________________________________________________</td>
+                </tr>
+                <tr>
+                    <td>_____________________________________________________________________________________________</td>
+                </tr>
+            </table>
+            @php
+                $signaturePath = public_path('images/madamSignature.png'); // Ensure this file exists
+                $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+            @endphp
+            <!-- Signatures Table -->
+            <!-- Signatures Table -->
+            <!-- Signatures Table -->
+            <table class="signatures-table">
+                <tr>
+                    <td style="text-align: center; vertical-align: bottom; padding-bottom: 10px;">
+                        Teacher's Signature
+                    </td>
+                    <td style="text-align: center;">
+                        <img src="{{ $signature }}" alt="Principal's Signature"
+                            style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                        <div>Principal's Signature</div>
+                    </td>
+                </tr>
+            </table>
+
+
+
         </div>
     @endforeach
 

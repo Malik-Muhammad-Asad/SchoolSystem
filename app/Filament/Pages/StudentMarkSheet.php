@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
+use Filament\Tables\Table;
 
 class StudentMarkSheet extends Page implements HasTable
 {
@@ -48,7 +49,7 @@ class StudentMarkSheet extends Page implements HasTable
                     ->schema([
                         Select::make('class_id')
                             ->label('Class')
-                            ->options(Classes::pluck('name', 'id')->toArray()) // Ensure array format
+                            ->options(Classes::pluck('name', 'id')->toArray())
                             ->live()
                             ->required()
                             ->columnSpan(1)
@@ -57,7 +58,7 @@ class StudentMarkSheet extends Page implements HasTable
 
                         Select::make('term_id')
                             ->label('Term')
-                            ->options(Term::pluck('name', 'id')->toArray()) // Ensure array format
+                            ->options(Term::pluck('name', 'id')->toArray())
                             ->live()
                             ->required()
                             ->columnSpan(1)
@@ -76,6 +77,13 @@ class StudentMarkSheet extends Page implements HasTable
                 ->icon('heroicon-o-magnifying-glass')
                 ->color('primary')
                 ->action(fn() => $this->search()),
+
+            \Filament\Actions\Action::make('download_all')
+                ->label('Download All')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->visible(fn() => $this->isSearched)
+                ->action(fn() => $this->downloadAllMarkSheets()),
         ];
     }
 
@@ -90,6 +98,17 @@ class StudentMarkSheet extends Page implements HasTable
         $this->resetTable();
     }
 
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query($this->getTableQuery())
+            ->columns($this->getTableColumns())
+            ->filters([])
+            ->actions($this->getTableActions())
+            ->bulkActions($this->getTableBulkActions())
+            ->emptyStateActions([]);
+    }
+
     public function getTableQuery(): Builder
     {
         if (!$this->isSearched) {
@@ -99,11 +118,14 @@ class StudentMarkSheet extends Page implements HasTable
         return Student::query()->where('class_id', $this->class_id);
     }
 
-
     protected function getTableColumns(): array
     {
         return [
-            TextColumn::make('id')->label('Roll No')->sortable(),
+            TextColumn::make('serial_no')
+                ->label('S.No') // Serial Number Column
+                ->state(fn($rowLoop) => $rowLoop->iteration) // Generates serial number
+                ->sortable(false),
+            // TextColumn::make('id')->label('Roll No')->sortable(),
             TextColumn::make('name')->label('Student Name')->searchable()->sortable(),
             TextColumn::make('father_name')->label('Father Name')->searchable(),
             TextColumn::make('classes.name')->label('Class'),
@@ -119,7 +141,7 @@ class StudentMarkSheet extends Page implements HasTable
                 ->form([
                     Select::make('term_id')
                         ->label('Term')
-                        ->options(Term::pluck('name', 'id')->toArray()) // Ensure array format
+                        ->options(Term::pluck('name', 'id')->toArray())
                         ->default($this->term_id)
                         ->required(),
                 ])
@@ -133,46 +155,40 @@ class StudentMarkSheet extends Page implements HasTable
         ];
     }
 
-    protected function isTableBulkActionsEnabled(): bool
-    {
-        return true;
-    }
+    // protected function getTableBulkActions(): array
+    // {
+    //     return [
+    //         BulkAction::make('download')
+    //             ->label('Download Mark Sheets')
+    //             ->icon('heroicon-o-arrow-down-tray')
+    //             ->color('primary')
+    //             ->requiresConfirmation()
+    //             ->modalHeading('Download Selected Student Mark Sheets')
+    //             ->modalDescription('Are you sure you want to download mark sheets for selected students?')
+    //             ->modalSubmitActionLabel('Yes, Download')
+    //             ->form([
+    //                 Select::make('term_id')
+    //                     ->label('Term')
+    //                     ->options(Term::pluck('name', 'id')->toArray())
+    //                     ->default($this->term_id)
+    //                     ->required(),
+    //             ])
+    //             ->action(function (Collection $records, array $data) {
+    //                 \Log::info('Bulk action triggered!', ['students' => $records->pluck('id')->toArray()]);
 
-    protected function getTableBulkActions(): array
-    {
-        return [
-            BulkAction::make('download')
-                ->label('Download Mark Sheets')
-                ->icon('heroicon-o-arrow-down-tray')
-                ->color('primary')
-                ->requiresConfirmation()
-                ->modalHeading('Download Selected Student Mark Sheets')
-                ->modalDescription('Are you sure you want to download mark sheets for selected students?')
-                ->modalSubmitActionLabel('Yes, Download')
-                ->form([
-                    Select::make('term_id')
-                        ->label('Term')
-                        ->options(Term::pluck('name', 'id')->toArray())
-                        ->default($this->term_id)
-                        ->required(),
-                ])
-                ->action(function (Collection $records, array $data) {
-                    if ($records->isEmpty()) {
-                        Notification::make()
-                            ->title('No students selected')
-                            ->warning()
-                            ->send();
-                        return null;
-                    }
+    //                 if ($records->isEmpty()) {
+    //                     Notification::make()
+    //                         ->title('No students selected')
+    //                         ->warning()
+    //                         ->send();
+    //                     return null;
+    //                 }
 
-                    return $this->downloadMarkSheets($records, $data['term_id']);
-                })
-                ->deselectRecordsAfterCompletion(),
-        ];
-    }
-
-
-
+    //                 return $this->downloadMarkSheets($records, $data['term_id']);
+    //             })
+    //             ->deselectRecordsAfterCompletion(),
+    //     ];
+    // }
 
     public function downloadAllMarkSheets()
     {
@@ -197,15 +213,24 @@ class StudentMarkSheet extends Page implements HasTable
         return $this->downloadMarkSheets($students, $this->term_id);
     }
 
+    public function downloadMarkSheets(Collection $students, $termId)
+    {
+        if ($students->isEmpty()) {
+            return back()->with('error', 'No students selected.');
+        }
 
+        $className = optional($students->first()->classes)->name ?? 'UnknownClass';
 
-    // public function downloadMarkSheets(Collection $students, $termId)
-    // {
-    //     $pdf = Pdf::loadView('exports.mark-sheets', [
-    //         'students' => $students,
-    //         'termId' => $termId,
-    //     ]);
+        $className = preg_replace('/[^A-Za-z0-9]/', '_', $className);
 
-    //     return response()->streamDownload(fn() => print ($pdf->output()), 'mark-sheets.pdf');
-    // }
+        $pdf = Pdf::loadView('exports.mark-sheets', [
+            'students' => $students,
+            'termId' => $termId,
+        ]);
+
+        $fileName = "mark-sheets_{$className}.pdf";
+
+        return response()->streamDownload(fn() => print ($pdf->output()), $fileName);
+    }
+
 }

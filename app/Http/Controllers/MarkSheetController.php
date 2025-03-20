@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Term;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Doctrine\DBAL\Schema\View;
 use Illuminate\Http\Request;
 
 class MarkSheetController extends Controller
@@ -17,7 +18,10 @@ class MarkSheetController extends Controller
         ]);
         // return $pdf->stream("mark-sheet-{$student->id}.pdf");
 
-
+        // view('exports.mark-sheets', [
+        //     'students' => collect([$student]),
+        //     'termId' => $term->id,
+        // ]);
         return $pdf->download("mark-sheet-{$student->id}.pdf");
     }
 }
