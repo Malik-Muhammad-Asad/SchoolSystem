@@ -19,6 +19,7 @@ class student extends Model
         'note',
         'status',
         'CreatedBy',
+        'is_active'
     ];
     public function classes()  // Fixed typo here
     {
@@ -34,6 +35,9 @@ class student extends Model
                     $q->where('academic_year_id', $currentYearId);
                 });
             }
+        });
+        static::addGlobalScope('onlyActiveStudents', function (Builder $query) {
+            $query->where('is_active', true);
         });
     }
 }

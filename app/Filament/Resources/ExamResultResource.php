@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ExamResultResource\Pages;
 use App\Filament\Resources\ExamResultResource\RelationManagers;
+use App\Models\AcademicYear;
 use App\Models\Classes;
 use App\Models\ExamResult;
 use App\Models\student;
@@ -67,7 +68,12 @@ class ExamResultResource extends Resource
 
                         Forms\Components\Select::make('class_id')
                             ->label('Class')
-                            ->relationship('class', 'name')
+                             ->options(function () {
+                        $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+                        return Classes::where('academic_year_id', $currentYearId)
+                            ->pluck('name', 'id');
+                    })
                             ->required()
                             ->reactive()
                             ->disabled(fn($record): bool => $record ? true : false)

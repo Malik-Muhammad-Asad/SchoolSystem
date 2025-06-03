@@ -20,10 +20,10 @@ class ExamResult extends Model
         'obtain_number',
     ];
 
-   
+
     public function class()
     {
-        return $this->belongsTo(Classes::class,'class_id');
+        return $this->belongsTo(Classes::class, 'class_id');
     }
 
     public function term()
@@ -44,5 +44,17 @@ class ExamResult extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+    protected static function booted(): void
+    {
+        static::addGlobalScope('currentAcademicYear', function ($query) {
+            $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+            if ($currentYearId) {
+                $query->whereHas('class', function ($q) use ($currentYearId) {
+                    $q->where('academic_year_id', $currentYearId);
+                });
+            }
+        });
     }
 }

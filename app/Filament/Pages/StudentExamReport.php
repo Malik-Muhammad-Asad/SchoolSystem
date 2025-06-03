@@ -84,7 +84,8 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     public function search()
     {
 
-        $subjectIds = ClassSubject::where('class_id', $this->class)->pluck('subject_id')->toArray();
+        // $subjectIds = ClassSubject::where('class_id', $this->class)->pluck('subject_id')->toArray();
+        $subjectIds = ClassSubject::pluck('subject_id')->toArray();
         $this->subjects = !empty($subjectIds)
             ? DB::table('subjects')->whereIn('id', $subjectIds)->get()
             : collect([]);
@@ -100,7 +101,6 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
         $this->examNames = Exam::whereIn('id', $this->exams)
             ->pluck('name', 'id')
             ->toArray();
-
         // Process scores
         $this->scores = $students->map(function ($student) use ($results) {
             $studentScores = ['name' => $student->name, 'father_name' => $student->father_name,];
@@ -135,6 +135,7 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
             $studentScores['percentage'] = $percentage;
             $studentScores['grade'] = $grade;
 
+            
             return $studentScores;
         });
     }
