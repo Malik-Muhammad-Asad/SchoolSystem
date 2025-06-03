@@ -1,6 +1,9 @@
 <?php return array (
   'livewireComponents' => 
   array (
+    'app.filament.resources.academic-year-resource.pages.create-academic-year' => 'App\\Filament\\Resources\\AcademicYearResource\\Pages\\CreateAcademicYear',
+    'app.filament.resources.academic-year-resource.pages.edit-academic-year' => 'App\\Filament\\Resources\\AcademicYearResource\\Pages\\EditAcademicYear',
+    'app.filament.resources.academic-year-resource.pages.list-academic-years' => 'App\\Filament\\Resources\\AcademicYearResource\\Pages\\ListAcademicYears',
     'app.filament.resources.class-subject-resource.pages.create-class-subject' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\CreateClassSubject',
     'app.filament.resources.class-subject-resource.pages.edit-class-subject' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\EditClassSubject',
     'app.filament.resources.class-subject-resource.pages.list-class-subjects' => 'App\\Filament\\Resources\\ClassSubjectResource\\Pages\\ListClassSubjects',
@@ -24,6 +27,9 @@
     'app.filament.resources.student-test-mark-resource.pages.edit-student-test-mark' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\EditStudentTestMark',
     'app.filament.resources.student-test-mark-resource.pages.list-student-test-marks' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\ListStudentTestMarks',
     'app.filament.resources.student-test-mark-resource.pages.view-student-test-mark' => 'App\\Filament\\Resources\\StudentTestMarkResource\\Pages\\ViewStudentTestMark',
+    'app.filament.resources.student-transfer-list-resource.pages.create-student-transfer-list' => 'App\\Filament\\Resources\\StudentTransferListResource\\Pages\\CreateStudentTransferList',
+    'app.filament.resources.student-transfer-list-resource.pages.edit-student-transfer-list' => 'App\\Filament\\Resources\\StudentTransferListResource\\Pages\\EditStudentTransferList',
+    'app.filament.resources.student-transfer-list-resource.pages.list-student-transfer-lists' => 'App\\Filament\\Resources\\StudentTransferListResource\\Pages\\ListStudentTransferLists',
     'app.filament.resources.subject-resource.pages.create-subject' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\CreateSubject',
     'app.filament.resources.subject-resource.pages.edit-subject' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\EditSubject',
     'app.filament.resources.subject-resource.pages.list-subjects' => 'App\\Filament\\Resources\\SubjectResource\\Pages\\ListSubjects',
@@ -56,13 +62,13 @@
   ),
   'pages' => 
   array (
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Pages\\StudentExamReport.php' => 'App\\Filament\\Pages\\StudentExamReport',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Pages\\StudentMarkSheet.php' => 'App\\Filament\\Pages\\StudentMarkSheet',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Pages\\StudentExamReport.php' => 'App\\Filament\\Pages\\StudentExamReport',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Pages\\StudentMarkSheet.php' => 'App\\Filament\\Pages\\StudentMarkSheet',
     0 => 'Filament\\Pages\\Dashboard',
   ),
   'pageDirectories' => 
   array (
-    0 => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament/Pages',
+    0 => 'G:\\SchoolManagmentGit\\app\\Filament/Pages',
   ),
   'pageNamespaces' => 
   array (
@@ -70,18 +76,20 @@
   ),
   'resources' => 
   array (
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ClassSubjectResource.php' => 'App\\Filament\\Resources\\ClassSubjectResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ClassesResource.php' => 'App\\Filament\\Resources\\ClassesResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResource.php' => 'App\\Filament\\Resources\\ExamResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\ExamResultResource.php' => 'App\\Filament\\Resources\\ExamResultResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\StudentResource.php' => 'App\\Filament\\Resources\\StudentResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\StudentTestMarkResource.php' => 'App\\Filament\\Resources\\StudentTestMarkResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\SubjectResource.php' => 'App\\Filament\\Resources\\SubjectResource',
-    'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament\\Resources\\TermResource.php' => 'App\\Filament\\Resources\\TermResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\AcademicYearResource.php' => 'App\\Filament\\Resources\\AcademicYearResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\ClassSubjectResource.php' => 'App\\Filament\\Resources\\ClassSubjectResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\ClassesResource.php' => 'App\\Filament\\Resources\\ClassesResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\ExamResource.php' => 'App\\Filament\\Resources\\ExamResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\ExamResultResource.php' => 'App\\Filament\\Resources\\ExamResultResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\StudentResource.php' => 'App\\Filament\\Resources\\StudentResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\StudentTestMarkResource.php' => 'App\\Filament\\Resources\\StudentTestMarkResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\StudentTransferListResource.php' => 'App\\Filament\\Resources\\StudentTransferListResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\SubjectResource.php' => 'App\\Filament\\Resources\\SubjectResource',
+    'G:\\SchoolManagmentGit\\app\\Filament\\Resources\\TermResource.php' => 'App\\Filament\\Resources\\TermResource',
   ),
   'resourceDirectories' => 
   array (
-    0 => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament/Resources',
+    0 => 'G:\\SchoolManagmentGit\\app\\Filament/Resources',
   ),
   'resourceNamespaces' => 
   array (
@@ -94,7 +102,7 @@
   ),
   'widgetDirectories' => 
   array (
-    0 => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\app\\Filament/Widgets',
+    0 => 'G:\\SchoolManagmentGit\\app\\Filament/Widgets',
   ),
   'widgetNamespaces' => 
   array (

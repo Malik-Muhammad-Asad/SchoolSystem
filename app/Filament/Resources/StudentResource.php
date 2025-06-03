@@ -8,6 +8,8 @@ use App\Models\Student;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use App\Models\AcademicYear;
+use App\Models\Classes;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
@@ -39,7 +41,12 @@ class StudentResource extends Resource
                 Forms\Components\Select::make('class_id')
                     ->label('class')
                     ->required()
-                    ->relationship('classes', 'name')  // Assumes the relationship is defined in the Student model (class() method)
+                     ->options(function () {
+        $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+        return Classes::where('academic_year_id', $currentYearId)
+            ->pluck('name', 'id');
+    }) 
                     ->preload()
                     ->searchable(),
                 // 
@@ -76,7 +83,12 @@ class StudentResource extends Resource
                 [
                     Tables\Filters\SelectFilter::make('class_id')
                         ->label('Class')
-                        ->relationship('classes', 'name'),
+                        ->options(function () {
+        $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+        return Classes::where('academic_year_id', $currentYearId)
+            ->pluck('name', 'id');
+    })
                 ],
                 layout: FiltersLayout::AboveContent
             )

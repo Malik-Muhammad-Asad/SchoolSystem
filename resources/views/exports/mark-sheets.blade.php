@@ -148,6 +148,13 @@
             padding-top: 20px;
             border-top: 2px solid #000;
         }
+
+        .report-card {
+            page-break-after: always;
+            /* Ensure new page for each report card */
+        }
+
+        php
     </style>
 </head>
 
@@ -254,17 +261,17 @@
                     <td><strong>Grade:</strong>
                         @php
                             $percentage = ($totalObtained / $totalMarks) * 100;
-                            if ($percentage >= 90) {
+                            if ($percentage >= 80) {
                                 $grade = 'A+1';
-                            } elseif ($percentage >= 80) {
-                                $grade = 'A';
                             } elseif ($percentage >= 70) {
-                                $grade = 'B';
+                                $grade = 'A';
                             } elseif ($percentage >= 60) {
-                                $grade = 'C';
+                                $grade = 'B';
                             } elseif ($percentage >= 50) {
-                                $grade = 'D';
+                                $grade = 'C';
                             } elseif ($percentage >= 40) {
+                                $grade = 'D';
+                            } elseif ($percentage >= 30) {
                                 $grade = 'E';
                             } else {
                                 $grade = 'F';
@@ -276,7 +283,8 @@
                     <td><strong>Rank:</strong> __________________</td>
                 </tr>
                 <tr>
-                    <td colspan="3"><strong>Attendance:</strong> _______ / _______</td>
+                    <td><strong>Result:</strong> __________________</td>
+                    <td colspan="2"><strong>Attendance:</strong> _______ / _______</td>
                 </tr>
             </table>
 

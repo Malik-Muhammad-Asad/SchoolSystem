@@ -159,8 +159,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\framework/cache/data',
-        'lock_path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\framework/cache/data',
+        'path' => 'G:\\SchoolManagmentGit\\storage\\framework/cache/data',
+        'lock_path' => 'G:\\SchoolManagmentGit\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -215,7 +215,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'YGSschool',
+        'database' => 'school',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -228,7 +228,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'YGSschool',
+        'database' => 'school',
         'username' => 'root',
         'password' => 'Admin123',
         'unix_socket' => '',
@@ -248,7 +248,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'YGSschool',
+        'database' => 'school',
         'username' => 'root',
         'password' => 'Admin123',
         'unix_socket' => '',
@@ -268,7 +268,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'YGSschool',
+        'database' => 'school',
         'username' => 'root',
         'password' => 'Admin123',
         'charset' => 'utf8',
@@ -283,7 +283,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'YGSschool',
+        'database' => 'school',
         'username' => 'root',
         'password' => 'Admin123',
         'charset' => 'utf8',
@@ -332,14 +332,14 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\app/private',
+        'root' => 'G:\\SchoolManagmentGit\\storage\\app/private',
         'serve' => true,
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\app/public',
+        'root' => 'G:\\SchoolManagmentGit\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -359,7 +359,7 @@
     ),
     'links' => 
     array (
-      'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\public\\storage' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\app/public',
+      'G:\\SchoolManagmentGit\\public\\storage' => 'G:\\SchoolManagmentGit\\storage\\app/public',
     ),
   ),
   'logging' => 
@@ -384,14 +384,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\logs/laravel.log',
+        'path' => 'G:\\SchoolManagmentGit\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\logs/laravel.log',
+        'path' => 'G:\\SchoolManagmentGit\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -456,7 +456,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\logs/laravel.log',
+        'path' => 'G:\\SchoolManagmentGit\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -532,7 +532,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\resources\\views/vendor/mail',
+        0 => 'G:\\SchoolManagmentGit\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -627,7 +627,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\framework/sessions',
+    'files' => 'G:\\SchoolManagmentGit\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -753,9 +753,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\resources\\views',
+      0 => 'G:\\SchoolManagmentGit\\resources\\views',
     ),
-    'compiled' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\framework\\views',
+    'compiled' => 'G:\\SchoolManagmentGit\\storage\\framework\\views',
   ),
   'dompdf' => 
   array (
@@ -764,10 +764,10 @@
     'convert_entities' => true,
     'options' => 
     array (
-      'font_dir' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\fonts',
-      'font_cache' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\storage\\fonts',
-      'temp_dir' => 'C:\\Users\\MUHAMM~1\\AppData\\Local\\Temp',
-      'chroot' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl',
+      'font_dir' => 'G:\\SchoolManagmentGit\\storage\\fonts',
+      'font_cache' => 'G:\\SchoolManagmentGit\\storage\\fonts',
+      'temp_dir' => 'C:\\Users\\malik\\AppData\\Local\\Temp',
+      'chroot' => 'G:\\SchoolManagmentGit',
       'allowed_protocols' => 
       array (
         'data://' => 
@@ -844,13 +844,13 @@
     ),
     'default_filesystem_disk' => 'public',
     'assets_path' => NULL,
-    'cache_path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\bootstrap/cache/filament',
+    'cache_path' => 'G:\\SchoolManagmentGit\\bootstrap/cache/filament',
     'livewire_loading_delay' => 'default',
   ),
   'livewire' => 
   array (
     'class_namespace' => 'App\\Livewire',
-    'view_path' => 'C:\\Users\\muhammad asad\\OneDrive\\Documents\\YGS SCHOOl\\resources\\views/livewire',
+    'view_path' => 'G:\\SchoolManagmentGit\\resources\\views/livewire',
     'layout' => 'components.layouts.app',
     'lazy_placeholder' => NULL,
     'temporary_file_upload' => 

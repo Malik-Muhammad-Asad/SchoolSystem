@@ -11,8 +11,25 @@ class Exam extends Model
 
     protected $fillable = [
         'name',
-        'term_id', // Fixed typo from 'tream_id' to 'term_id'
+        'term_id', 
+        'academic_year_id'
     ];
+
+     protected static function booted(): void
+    {
+        static::addGlobalScope('currentAcademicYear', function ($query) {
+            $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+            if ($currentYearId) {
+                $query->where('academic_year_id', $currentYearId);
+            }
+        });
+         static::creating(function ($model) {
+            if (empty($model->academic_year_id)) {
+                $model->academic_year_id = AcademicYear::where('is_current', true)->value('id');
+            }
+        });
+    }
 
     public function Term()  // Changed 'Term' to 'term' to follow Laravel naming conventions
     {
