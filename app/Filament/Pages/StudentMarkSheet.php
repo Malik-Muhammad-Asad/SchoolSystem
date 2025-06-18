@@ -27,7 +27,8 @@ class StudentMarkSheet extends Page implements HasTable
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.student-mark-sheet';
     protected static ?string $title = 'Student Mark Sheets';
-    protected static ?string $navigationLabel = 'Mark Sheets';
+    protected static ?string $navigationLabel = 'Mark Sheets Report';
+    protected static ?string $navigationGroup = 'Report';
 
     public $class_id = null;
     public $term_id = null;

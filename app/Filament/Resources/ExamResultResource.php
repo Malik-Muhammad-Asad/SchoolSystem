@@ -4,9 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ExamResultResource\Pages;
 use App\Filament\Resources\ExamResultResource\RelationManagers;
-use App\Models\AcademicYear;
 use App\Models\Classes;
 use App\Models\ExamResult;
+use App\Models\AcademicYear;
 use App\Models\student;
 use App\Models\test;
 use Filament\Forms;
@@ -24,7 +24,7 @@ class ExamResultResource extends Resource
 {
     protected static ?string $model = ExamResult::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Mask Compile';
     public static function form(Form $form): Form
     {
@@ -162,9 +162,15 @@ class ExamResultResource extends Resource
             ])
             ->filters(
                 [
-                    Tables\Filters\SelectFilter::make('class')
+                    Tables\Filters\SelectFilter::make('classes')
                         ->label('Class')
-                        ->relationship('class', 'name'),
+                    //     ->options(function () {
+                    //     $currentYearId = AcademicYear::where('is_current', true)->value('id');
+
+                    //     return Classes::where('academic_year_id', $currentYearId)
+                    //         ->pluck('name', 'id');
+                    // }),
+                    ->relationship('class','name'),
                     Tables\Filters\SelectFilter::make('term')
                         ->label('Term')
                         ->relationship('term', 'name'),

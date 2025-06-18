@@ -36,10 +36,10 @@ class StudentTransferListResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('gr_no')
-                //     ->label('GR No')
-                //     ->sortable()
-                //     ->searchable(),
+                TextColumn::make('gr_no')
+                    ->label('GR No')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
@@ -69,7 +69,8 @@ class StudentTransferListResource extends Resource
 
                 SelectFilter::make('class_id')
                     ->label('Class')
-                    ->options(Classes::with('academicYear')->get()->mapWithKeys(function ($class) {
+                    ->options(Classes::with('academicYear')->withoutGlobalScopes(['currentAcademicYear'])
+                    ->get()->mapWithKeys(function ($class) {
                         return [$class->id => $class->academicYear->year . ' - ' . $class->name];
                     }))
                     ->searchable()

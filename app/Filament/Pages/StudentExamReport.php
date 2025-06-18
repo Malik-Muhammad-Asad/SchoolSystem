@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\Classes;
 use App\Models\ClassSubject;
 use App\Models\Exam;
+use App\Models\AcademicYear;
 use App\Models\StudentTestMark;
 use App\Models\Term;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -25,8 +26,9 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
     public $examNames = [];
     public $ExtraExams = null;
     protected static string $view = 'filament.pages.student-exam-report';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+  protected static ?string $navigationGroup = 'Report';
+  protected static ?string $navigationLabel = 'Compilation';
     public function mount()
     {
         $this->form->fill([
@@ -83,13 +85,14 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
 
     public function search()
     {
-
+ $currentYearId = AcademicYear::where('is_current', true)->value('id');
         // $subjectIds = ClassSubject::where('class_id', $this->class)->pluck('subject_id')->toArray();
         $subjectIds = ClassSubject::pluck('subject_id')->toArray();
         $this->subjects = !empty($subjectIds)
             ? DB::table('subjects')->whereIn('id', $subjectIds)->get()
             : collect([]);
         $students = DB::table('students')
+        ->where('is_active',true)
             ->where('class_id', $this->class)
             ->get();
         $results = DB::table('exam_results')
@@ -155,6 +158,7 @@ class StudentExamReport extends Page implements Forms\Contracts\HasForms
 
     private function getExamScores($studentResults, $subjectId)
     {
+        
         return optional($studentResults)
             ->where('subject_id', $subjectId)
             ->pluck('obtain_number', 'exam_id')

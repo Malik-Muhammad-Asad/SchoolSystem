@@ -142,7 +142,7 @@ class StudentResource extends Resource
                                 ->send();
                         })
                         ->requiresConfirmation(),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
