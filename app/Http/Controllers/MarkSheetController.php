@@ -10,13 +10,23 @@ use Illuminate\Http\Request;
 
 class MarkSheetController extends Controller
 {
-    public function downloadSingle(Student $student, Term $term)
+    public function downloadSingle(Student $student, Term $term, string $type)
     {
-        $pdf = Pdf::loadView('exports.exam-mark-sheets', [
-            'students' => collect([$student]),
-            'termId' => $term->id,
-            'IsRank' => true,
-        ]);
+        
+        if ($type == "single") {
+            $pdf = Pdf::loadView('exports.exam-mark-sheets', [
+                'students' => collect([$student]),
+                'termId' => $term->id,
+                'IsRank' => false,
+            ]);
+        }
+        else{
+             $pdf = Pdf::loadView('exports.mark-sheets', [
+                'students' => collect([$student]),
+                'termId' => $term->id,
+            ]);
+        }
+
         // return $pdf->stream("mark-sheet-{$student->id}.pdf");
 
         // view('exports.mark-sheets', [

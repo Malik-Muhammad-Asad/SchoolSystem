@@ -511,7 +511,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::NtQitklPsTKYRjN1',
+            '_route' => 'generated::MZxsnBEv2jEHmRxK',
           ),
           1 => NULL,
           2 => 
@@ -531,7 +531,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::tyD2BWLvXEvpzXVD',
+            '_route' => 'generated::q2cZeBjC4fuYSaGs',
           ),
           1 => NULL,
           2 => 
@@ -570,7 +570,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::y2Vg9hkAYK7wS9vg',
+            '_route' => 'generated::ntrw7g8kRFw4LgAC',
           ),
           1 => NULL,
           2 => 
@@ -590,7 +590,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::g7xzwA08uJP5BeZi',
+            '_route' => 'generated::3HdEj7yuX7UlaqMq',
           ),
           1 => NULL,
           2 => 
@@ -627,7 +627,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/filament/(?|exports/([^/]++)/download(*:45)|imports/([^/]++)/failed\\-rows/download(*:90))|/admin/(?|academic\\-years/([^/]++)/edit(*:137)|class(?|\\-subjects/([^/]++)/edit(*:177)|es/([^/]++)(?|(*:199)|/edit(*:212)))|exam(?|s/([^/]++)(?|(*:242)|/edit(*:255))|\\-results/([^/]++)(?|(*:285)|/edit(*:298)))|s(?|tudent(?|s/([^/]++)(?|(*:334)|/edit(*:347))|\\-test\\-marks/([^/]++)(?|(*:381)|/edit(*:394)))|ubjects/([^/]++)/edit(*:425))|terms/([^/]++)(?|(*:451)|/edit(*:464)))|/livewire/preview\\-file/([^/]++)(*:506)|/mark\\-sheets/([^/]++)/([^/]++)(*:545)|/storage/(.*)(*:566))/?$}sDu',
+      0 => '{^(?|/filament/(?|exports/([^/]++)/download(*:45)|imports/([^/]++)/failed\\-rows/download(*:90))|/admin/(?|academic\\-years/([^/]++)/edit(*:137)|class(?|\\-subjects/([^/]++)/edit(*:177)|es/([^/]++)(?|(*:199)|/edit(*:212)))|exam(?|s/([^/]++)(?|(*:242)|/edit(*:255))|\\-results/([^/]++)(?|(*:285)|/edit(*:298)))|s(?|tudent(?|s/([^/]++)(?|(*:334)|/edit(*:347))|\\-test\\-marks/([^/]++)(?|(*:381)|/edit(*:394)))|ubjects/([^/]++)/edit(*:425))|terms/([^/]++)(?|(*:451)|/edit(*:464)))|/livewire/preview\\-file/([^/]++)(*:506)|/mark\\-sheets/([^/]++)/([^/]++)/([^/]++)(*:554)|/storage/(.*)(*:575))/?$}sDu',
     ),
     3 => 
     array (
@@ -1045,7 +1045,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      545 => 
+      554 => 
       array (
         0 => 
         array (
@@ -1057,6 +1057,7 @@ app('router')->setCompiledRoutes(
           array (
             0 => 'student',
             1 => 'term',
+            2 => 'type',
           ),
           2 => 
           array (
@@ -1069,7 +1070,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      566 => 
+      575 => 
       array (
         0 => 
         array (
@@ -3183,7 +3184,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::NtQitklPsTKYRjN1' => 
+    'generated::MZxsnBEv2jEHmRxK' => 
     array (
       'methods' => 
       array (
@@ -3195,7 +3196,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::NtQitklPsTKYRjN1',
+        'as' => 'generated::MZxsnBEv2jEHmRxK',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3211,7 +3212,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::tyD2BWLvXEvpzXVD' => 
+    'generated::q2cZeBjC4fuYSaGs' => 
     array (
       'methods' => 
       array (
@@ -3223,7 +3224,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::tyD2BWLvXEvpzXVD',
+        'as' => 'generated::q2cZeBjC4fuYSaGs',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3294,7 +3295,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::y2Vg9hkAYK7wS9vg' => 
+    'generated::ntrw7g8kRFw4LgAC' => 
     array (
       'methods' => 
       array (
@@ -3323,7 +3324,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000d5f0000000000000000";}}',
-        'as' => 'generated::y2Vg9hkAYK7wS9vg',
+        'as' => 'generated::ntrw7g8kRFw4LgAC',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3339,7 +3340,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::g7xzwA08uJP5BeZi' => 
+    'generated::3HdEj7yuX7UlaqMq' => 
     array (
       'methods' => 
       array (
@@ -3362,7 +3363,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::g7xzwA08uJP5BeZi',
+        'as' => 'generated::3HdEj7yuX7UlaqMq',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3423,7 +3424,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'mark-sheets/{student}/{term}',
+      'uri' => 'mark-sheets/{student}/{term}/{type}',
       'action' => 
       array (
         'middleware' => 

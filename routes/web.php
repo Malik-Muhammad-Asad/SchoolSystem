@@ -13,5 +13,5 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::get('/mark-sheets/{student}/{term}', [MarkSheetController::class, 'downloadSingle'])
+Route::get('/mark-sheets/{student}/{term}/{type}', [MarkSheetController::class, 'downloadSingle'])
     ->name('mark-sheets.download-single');

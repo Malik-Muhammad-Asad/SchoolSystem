@@ -234,7 +234,7 @@
                     @endphp
                     <tr>
                         <td>{{ $subjectName }}</td>
-                        <td>{{ $maxMarks }}</td>
+                        <td>{{ number_format($maxMarks ,0)}}</td>
                         <td>{{ $obtainedMarks }}</td>
                     </tr>
                     @endforeach
@@ -284,12 +284,12 @@
 
                 <table class="summary-table">
                     <tr>
-                        <td><strong>Percentage:</strong> {{ $isPass ? round($percentage, 2).'%' : '__________________' }}</td>
-                        <td><strong>Grade:</strong> {{ $isPass ? $grade : '__________________' }}</td>
-                        <td><strong>Rank:</strong> {{ ($isPass && $IsRank)? ($rankings[$student->id] ?? '__________________') : '__________________' }}</td>
+                        <td><strong>Percentage:</strong> {{ $isPass ? round($percentage, 2).'%' : '   -' }}</td>
+                        <td><strong>Grade:</strong> {{ $isPass ? $grade : '   -' }}</td>
+                        <td><strong>Rank:</strong> {{ ($isPass && $IsRank)? ($rankings[$student->id] ?? '   -') : '   -' }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Result:</strong> {{ $isPass ? 'Pass' : 'Fail' }}</td>
+                        <td><strong>Result:</strong> {{ $isPass ? 'Passed' : 'Failed' }}</td>
                         <td colspan="2"></td>
                     </tr>
                 </table>

@@ -33,6 +33,7 @@ class StudentMarkSheet extends Page implements HasTable
     public $class_id = null;
     public $term_id = null;
     public $isSearched = false;
+    public $type = "single";
 
     public function mount(): void
     {
@@ -65,6 +66,18 @@ class StudentMarkSheet extends Page implements HasTable
                             ->columnSpan(1)
                             ->reactive()
                             ->afterStateUpdated(fn($state) => $this->term_id = $state),
+                        Select::make('type')
+                            ->label('Report Type')
+                            ->options([
+                                'single' => 'Single Exam',
+                                'multi' => 'Multi Exam',
+                            ])
+                            ->required()
+                            ->columnSpan(1)
+                            ->reactive()
+                            // ->afterStateUpdated(function ($state) {
+                            //     $this->type = $state === 'single';
+                            // }),
                     ])
                     ->columns(3),
             ]);
@@ -151,6 +164,7 @@ class StudentMarkSheet extends Page implements HasTable
                     redirect()->route('mark-sheets.download-single', [
                         'student' => $record->id,
                         'term' => $data['term_id'],
+                        'type' => $this->type,
                     ])
                 ),
         ];
@@ -203,6 +217,7 @@ class StudentMarkSheet extends Page implements HasTable
 
         $students = Student::where('class_id', $this->class_id)->get();
 
+
         if ($students->isEmpty()) {
             Notification::make()
                 ->title('No students found in selected class')
@@ -210,11 +225,13 @@ class StudentMarkSheet extends Page implements HasTable
                 ->send();
             return null;
         }
+        // $selectionType = $this->form->getState()['selection_type'] ?? 'single';
+        // $type = $selectionType === 'single';
 
-        return $this->downloadMarkSheets($students, $this->term_id);
+        return $this->downloadMarkSheets($students, $this->term_id, $this->type);
     }
 
-    public function downloadMarkSheets(Collection $students, $termId)
+    public function downloadMarkSheets(Collection $students, $termId, $type)
     {
         if ($students->isEmpty()) {
             return back()->with('error', 'No students selected.');
@@ -223,15 +240,21 @@ class StudentMarkSheet extends Page implements HasTable
         $className = optional($students->first()->classes)->name ?? 'UnknownClass';
 
         $className = preg_replace('/[^A-Za-z0-9]/', '_', $className);
-
+      
+        if ($type =="single") {
+            $pdf = Pdf::loadView('exports.exam-mark-sheets', [
+                'students' => $students,
+                'termId' => $termId,
+                'IsRank' => true,
+            ]);
+        }else{
         $pdf = Pdf::loadView('exports.mark-sheets', [
             'students' => $students,
             'termId' => $termId,
-        ]);
+        ]);}
 
         $fileName = "mark-sheets_{$className}.pdf";
 
-        return response()->streamDownload(fn() => print ($pdf->output()), $fileName);
+        return response()->streamDownload(fn() => print($pdf->output()), $fileName);
     }
-
 }
