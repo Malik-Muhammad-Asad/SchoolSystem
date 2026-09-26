@@ -6,6 +6,7 @@ use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
 use Filament\Forms;
+use Illuminate\Validation\Rule;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use App\Models\AcademicYear;
@@ -34,7 +35,7 @@ class StudentResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('gr_no')
                     ->required()
-                    ->unique()
+                    ->rule(fn ($record) => Rule::unique('students', 'gr_no')->ignore($record?->id))
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->required()

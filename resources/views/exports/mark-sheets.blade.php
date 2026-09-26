@@ -3,9 +3,13 @@
 
 <head>
     @php
-        $watermarkPath = public_path('images/Logo.png'); // Ensure this file exists
-        $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
-
+        $watermark = null;
+        if (isset($schoolSettings) && $schoolSettings->watermark_image) {
+            $watermarkPath = public_path('storage/' . $schoolSettings->watermark_image);
+            if (file_exists($watermarkPath)) {
+                $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
+            }
+        }
     @endphp
     <meta charset="utf-8">
     <title>Student Report Card</title>
@@ -32,22 +36,23 @@
         }
 
         /* Add this after the .report-card class */
+        @if($watermark)
         .report-card::after {
             content: "";
             position: absolute;
-            top: -70px;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 25%;
+            left: 15%;
+            width: 70%;
+            height: 50%;
             background-image: url('{{ $watermark }}');
-            background-size: 200px;
+            background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.20;
-            /* Adjust this value (0.1-0.2 for very light) */
+            opacity: 0.15;
             pointer-events: none;
             z-index: 1;
         }
+        @endif
 
         .header {
             text-align: center;
@@ -132,8 +137,6 @@
             /* Remove individual cell borders */
         }
 
-        F
-
         /* Signature Section */
         .signatures-table {
             width: 100%;
@@ -153,8 +156,13 @@
             page-break-after: always;
             /* Ensure new page for each report card */
         }
-
-        php
+        input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #000; /* For modern browsers */
+    margin-right: 6px;
+    vertical-align: middle;
+}
     </style>
 </head>
 
@@ -165,9 +173,15 @@
         use App\Models\ClassSubject;
         use App\Models\ExamResult;
         use App\Models\Term;
+        use App\Models\FinalResult;
+        use App\Models\AcademicYear;
 
         $exams = Exam::where('term_id', $termId)->get();
         $term = Term::find($termId);
+        $rankQuery = FinalResult::where('term_id', $termId)
+        ->where('class_id', $students->first()->class_id ?? null)
+        ->where('exam_id',null)->get();
+        $session = AcademicYear::where('is_current', true)->first();
     @endphp
 
     @foreach($students as $student)
@@ -181,8 +195,19 @@
             $totalObtained = 0;
         @endphp
         @php
-            $path = public_path('images/schoolLogo.png'); // Ensure this file exists
-            $logo = "data:image/png;base64," . base64_encode(file_get_contents($path));
+            $logo = null;
+            if (isset($schoolSettings) && $schoolSettings->header_image) {
+                $path = public_path('storage/' . $schoolSettings->header_image);
+                if (file_exists($path)) {
+                    $logo = "data:image/png;base64," . base64_encode(file_get_contents($path));
+                }
+            }
+            if (!$logo) {
+                $path = public_path('images/schoolLogo.png'); // Fallback
+                if (file_exists($path)) {
+                    $logo = "data:image/png;base64," . base64_encode(file_get_contents($path));
+                }
+            }
         @endphp
 
 
@@ -190,14 +215,16 @@
 
         <div class="report-card">
             <div style="text-align: center;">
-                <img src="{{ $logo }}" alt="School Logo"
-                    style="width: 550px; height: 100px; display: block; margin: 0 auto;">
+                @if($logo)
+                    <img src="{{ $logo }}" alt="School Logo"
+                        style="width: 550px; height: 100px; display: block; margin: 0 auto;">
+                @endif
             </div>
             <div class="header">
 
 
                 <div class="title">Progress Report</div>
-                <div class="subtitle">{{ $term->name }} Examination - Session 2024-25</div>
+                <div class="subtitle">Half Yearly Examination - Session {{ $session->year }}</div>
             </div>
 
             <div class="student-info">
@@ -235,8 +262,11 @@
                                                     $subjectTotalMax += $maxMarks;
                                                     $subjectTotalObtained += $obtainedMarks;
                                                 @endphp
-                                                <td>{{ number_format($maxMarks, 0) }}</td>
-                                                <td>{{ $obtainedMarks }}</td>
+                                                <td>{{ (int)$maxMarks }}</td>
+                                                <td>
+                                                   {{ fmod($obtainedMarks, 1) == 0 ? (int)$obtainedMarks : number_format($obtainedMarks, 2) }}
+                                                </td>
+
                                     @endforeach
                                     <td><strong>{{ $subjectTotalMax }}</strong></td>
                                     <td><strong>{{ $subjectTotalObtained }}</strong></td>
@@ -253,65 +283,99 @@
                     </tr>
                 </tbody>
             </table>
+@php
+    $percentage = $totalMarks > 0 ? ($totalObtained / $totalMarks) * 100 : 0;
+    $StudentRank =$rankQuery->where('student_id', $student->id)->first();
+    $isPass = $StudentRank->grade != 'F';
+    $remarks = '';
 
-            <!-- Summary Table (With Attendance) -->
+  
+
+    if ($isPass) {
+        if ($percentage >= 80) {
+            $grade = 'A + 1';
+            $remarks = 'Exceptional work! Keep up the dedication and excellence.';
+        } elseif ($percentage >= 70) {
+            $grade = 'A';
+            $remarks = 'Great job! Keep up the good work and aim even higher.';
+        } elseif ($percentage >= 60) {
+            $grade = 'B';
+            $remarks = 'A decent performance! Aim for further improvement.';
+        } elseif ($percentage >= 50) {
+            $grade = 'C';
+            $remarks = 'Fair effort, but there\'s room for improvement. Keep working!';
+        } else {
+            $grade = 'D';
+            $remarks = 'Don\'t be discouraged! With hard work, you can do much better.';
+        }
+    } else {
+        $remarks = 'Student needs to pass all subjects to receive final remarks.';
+    }
+@endphp
+
             <table class="summary-table">
-                <tr>
-                    <td><strong>Percentage:</strong> {{ round(($totalObtained / $totalMarks) * 100, 2) }}%</td>
-                    <td><strong>Grade:</strong>
-                        @php
-                            $percentage = ($totalObtained / $totalMarks) * 100;
-                            if ($percentage >= 80) {
-                                $grade = 'A+1';
-                            } elseif ($percentage >= 70) {
-                                $grade = 'A';
-                            } elseif ($percentage >= 60) {
-                                $grade = 'B';
-                            } elseif ($percentage >= 50) {
-                                $grade = 'C';
-                            } elseif ($percentage >= 40) {
-                                $grade = 'D';
-                            } elseif ($percentage >= 30) {
-                                $grade = 'E';
-                            } else {
-                                $grade = 'F';
-                            }
-                        @endphp
-                        {{ $grade }}
-                    </td>
-
-                    <td><strong>Rank:</strong> __________________</td>
-                </tr>
-                <tr>
-                    <td><strong>Result:</strong> __________________</td>
-                    <td colspan="2"><strong>Attendance:</strong> _______ / _______</td>
-                </tr>
-            </table>
-
+                    <tr>
+                        <td><strong>Percentage:</strong> {{ $isPass ? round($percentage, 2).'%' : '   -' }}</td>
+                        <td><strong>Grade:</strong> {{ $isPass ? $grade : '   -' }}</td>
+                        <td><strong>Rank:</strong> {{ ($isPass )? ($StudentRank->rank ?? '   -') : '   -' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Result:</strong> {{ $isPass ? 'Passed' : 'Failed' }}</td>
+                        <td colspan="2"><strong>Summer Vacation Work:</strong> ________________</td>
+                    </tr>
+                </table>
             <!-- Remarks Section -->
-            <table class="remarks-table">
-                <tr>
-                    <td>Teacher's Remarks: __________________________________________________________________________</td>
-                </tr>
-                <tr>
-                    <td>_____________________________________________________________________________________________</td>
-                </tr>
-            </table>
+           <table class="remarks-table">
+                    <tr>
+                        <td>Teacher's Remarks: {{ $remarks }}</td>
+                    </tr>
+                </table>
+                <table class="remarks-table" style="margin-top: 10px;">
+    <tr>
+        <td colspan="4" style="text-align: left;">
+            <strong>Social Behaviour:</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 25%;"><input type="checkbox" disabled> Obedient</td>
+        <td style="width: 25%;"><input type="checkbox" disabled> Punctual</td>
+        <td style="width: 25%;"><input type="checkbox" disabled> Responsible</td>
+        <td style="width: 25%;"><input type="checkbox" disabled> Hardworking</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" disabled> Respectful</td>
+        <td><input type="checkbox" disabled> Cooperative</td>
+        <td><input type="checkbox" disabled> Attentive</td>
+        <td><input type="checkbox" disabled> Disciplined</td>
+    </tr>
+</table>
             @php
-                $signaturePath = public_path('images/madamSignature.png'); // Ensure this file exists
-                $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+                $signature = null;
+                if (isset($schoolSettings) && $schoolSettings->signature_image) {
+                    $signaturePath = public_path('storage/' . $schoolSettings->signature_image);
+                    if (file_exists($signaturePath)) {
+                        $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+                    }
+                }
+                if (!$signature) {
+                    $signaturePath = public_path('images/Afshan.png'); // Fallback
+                    if (file_exists($signaturePath)) {
+                        $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+                    }
+                }
             @endphp
             <!-- Signatures Table -->
-            <!-- Signatures Table -->
-            <!-- Signatures Table -->
+           
             <table class="signatures-table">
                 <tr>
                     <td style="text-align: center; vertical-align: bottom; padding-bottom: 10px;">
                         Teacher's Signature
                     </td>
                     <td style="text-align: center;">
-                        <img src="{{ $signature }}" alt="Principal's Signature"
-                            style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                        @if($signature)
+                            <img src="{{ $signature }}" alt="Principal's Signature"
+                                 style="width: 80px; height: auto; display: block; margin: 0 auto;">
+                        @endif
                         <div>Principal's Signature</div>
                     </td>
                 </tr>

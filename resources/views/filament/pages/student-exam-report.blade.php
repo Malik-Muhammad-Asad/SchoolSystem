@@ -41,12 +41,28 @@
                             </th>
                         @endforeach
                         <th rowspan="2"
-                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
-                            1st Grand Test
+                            class="px-4 py-2 text-center text-sm font-semibold text-blue-800 bg-blue-100 border border-gray-300">
+                            Total
                         </th>
+                        @if ($searchedPreviousTerm)
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-green-800 bg-green-100 border border-gray-300">
+                            Prev Term Total
+                        </th>
+                        @endif
+                        @if ($searchedExtraExams)
                         <th rowspan="2"
                             class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
-                            Total
+                            Extra Test
+                        </th>
+                        @endif
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
+                            Obtained Grand Total
+                        </th>
+                        <th rowspan="2"
+                            class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300 font-bold uppercase">
+                            Total Marks
                         </th>
                         <th rowspan="2"
                             class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border border-gray-300">
@@ -85,16 +101,34 @@
                                     {{ $score[$subject->name]['total'] }}
                                 </td>
                             @endforeach
-                            <td class="px-4 py-2 text-sm font-bold text-gray-900">
+                            {{-- Term Total as Total --}}
+                            <td class="px-4 py-2 text-sm font-bold text-blue-800 bg-blue-50 border border-gray-300">
+                                {{ $score['termTotal'] }}
+                            </td>
+                            {{-- Prev Term Total --}}
+                            @if ($searchedPreviousTerm)
+                            <td class="px-4 py-2 text-sm font-bold text-green-800 bg-green-50 border border-gray-300">
+                                {{ $score['prevTermTotal'] }}
+                            </td>
+                            @endif
+                            {{-- Extra Test --}}
+                            @if ($searchedExtraExams)
+                            <td class="px-4 py-2 text-sm font-bold text-gray-900 border border-gray-300">
                                 {{ $score['ExtraObtain'] }}
                             </td>
-                            <td class="px-4 py-2 text-sm font-bold text-gray-900">
+                            @endif
+                            {{-- Obtained Grand Total --}}
+                            <td class="px-4 py-2 text-sm font-bold text-gray-900 border border-gray-300 bg-gray-50">
                                 {{ $score['total'] }}
                             </td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
+                            {{-- Total Marks (New Column) --}}
+                            <td class="px-4 py-2 text-sm font-bold text-gray-900 border border-gray-300 bg-gray-50">
+                                {{ $score['grandMaxTotal'] }}
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-700 border border-gray-300">
                                 {{ number_format($score['percentage'], 2) }}%
                             </td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
+                            <td class="px-4 py-2 text-sm text-gray-700 border border-gray-300">
                                 {{ $score['grade'] }}
                             </td>
                         </tr>

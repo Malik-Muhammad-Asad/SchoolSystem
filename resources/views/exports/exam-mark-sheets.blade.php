@@ -3,8 +3,19 @@
 
 <head>
     @php
-    $watermarkPath = public_path('images/Logo.png');
-    $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
+    $watermark = null;
+    if (isset($schoolSettings) && $schoolSettings->watermark_image) {
+        $watermarkPath = public_path('storage/' . $schoolSettings->watermark_image);
+        if (file_exists($watermarkPath)) {
+            $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
+        }
+    }
+    if (!$watermark) {
+        $watermarkPath = public_path('images/Logo.png');
+        if (file_exists($watermarkPath)) {
+            $watermark = "data:image/png;base64," . base64_encode(file_get_contents($watermarkPath));
+        }
+    }
     @endphp
     <meta charset="utf-8">
     <title>Student Report Card</title>
@@ -28,21 +39,23 @@
             page-break-after: always;
         }
 
+        @if($watermark)
         .report-card::after {
             content: "";
             position: absolute;
-            top: -70px;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 25%;
+            left: 15%;
+            width: 70%;
+            height: 50%;
             background-image: url('{{ $watermark }}');
-            background-size: 200px;
+            background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.20;
+            opacity: 0.15;
             pointer-events: none;
             z-index: 1;
         }
+        @endif
 
         .header {
             text-align: center;
@@ -193,14 +206,26 @@
         ->keyBy('subject_id');
         $totalMarks = 0;
         $totalObtained = 0;
-        $logoPath = public_path('images/schoolLogo.png');
-        $logo = "data:image/png;base64," . base64_encode(file_get_contents($logoPath));
+        @php
+        $logo = null;
+        if (isset($schoolSettings) && $schoolSettings->header_image) {
+            $logoPath = public_path('storage/' . $schoolSettings->header_image);
+            if (file_exists($logoPath)) {
+                $logo = "data:image/png;base64," . base64_encode(file_get_contents($logoPath));
+            }
+        }
+        if (!$logo) {
+            $logoPath = public_path('images/schoolLogo.png');
+            if (file_exists($logoPath)) {
+                $logo = "data:image/png;base64," . base64_encode(file_get_contents($logoPath));
+            }
+        }
         @endphp
 
         <div class="report-card">
-            <div style="text-align: center;">
-                <img src="{{ $logo }}" alt="School Logo" style="width: 550px; height: 100px; display: block; margin: 0 auto;">
-            </div>
+                @if($logo)
+                    <img src="{{ $logo }}" alt="School Logo" style="width: 550px; height: 100px; display: block; margin: 0 auto;">
+                @endif
 
             <div class="header">
                 <div class="title">Progress Report</div>
@@ -300,20 +325,35 @@
                     </tr>
                 </table>
 
-                @php
-                $signaturePath = public_path('images/madamSignature.png');
-                $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
-                @endphp
-
+            @php
+                $signature = null;
+                if (isset($schoolSettings) && $schoolSettings->signature_image) {
+                    $signaturePath = public_path('storage/' . $schoolSettings->signature_image);
+                    if (file_exists($signaturePath)) {
+                        $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+                    }
+                }
+                if (!$signature) {
+                    $signaturePath = public_path('images/madamSignature.png');
+                    if (file_exists($signaturePath)) {
+                        $signature = "data:image/png;base64," . base64_encode(file_get_contents($signaturePath));
+                    }
+                }
+            @endphp
                 <table class="signatures-table">
-                    <tr>
-                        <td>Teacher's Signature</td>
-                        <td>
-                            <img src="{{ $signature }}" alt="Principal's Signature" style="width: 100px; height: auto; display: block; margin: 0 auto;">
-                            <div>Principal's Signature</div>
-                        </td>
-                    </tr>
-                </table>
+                <tr>
+                    <td style="text-align: center; vertical-align: bottom; padding-bottom: 10px;">
+                        Teacher's Signature
+                    </td>
+                    <td style="text-align: center;">
+                        @if($signature)
+                            <img src="{{ $signature }}" alt="Principal's Signature"
+                                style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                        @endif
+                        <div>Principal's Signature</div>
+                    </td>
+                </tr>
+            </table>
         </div>
         @endforeach
 

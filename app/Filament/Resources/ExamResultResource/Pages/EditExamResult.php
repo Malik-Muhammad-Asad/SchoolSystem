@@ -42,6 +42,10 @@ class EditExamResult extends EditRecord
                 ->where('term_id', $termId)
                 ->where('exam_id', $examId)
                 ->where('subject_id', $subjectId)
+                ->whereHas('student', function ($query) {
+                    $query->where('is_active', 1); 
+                })
+                ->with('student')
                 ->get();
 
             // Map students to the repeater data

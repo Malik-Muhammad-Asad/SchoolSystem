@@ -16,7 +16,7 @@ class Classes extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope('currentAcademicYear', function ($query) {
+        static::addGlobalScope('`currentAcademicYear`', function ($query) {
             $currentYearId = AcademicYear::where('is_current', true)->value('id');
 
             if ($currentYearId) {
@@ -32,7 +32,7 @@ class Classes extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'class_subject', 'class_id', 'subject_id');
+        return $this->belongsToMany(Subject::class, 'class_subjects', 'class_id', 'subject_id');
     }
 
     public function students()
